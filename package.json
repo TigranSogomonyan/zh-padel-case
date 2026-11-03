@@ -1,0 +1,11 @@
+{
+  "name": "zh-padel-case-static-checks",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:smoke": "node tests/smoke.mjs"
+  },
+  "devDependencies": {
+    "playwright": "1.55.0"
+  }
+}
