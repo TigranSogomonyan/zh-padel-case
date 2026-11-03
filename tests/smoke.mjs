@@ -72,10 +72,10 @@ try {
       await page.waitForTimeout(3000);
 
       const state = await page.evaluate(() => {
-        const visibleText = (el) => (el.innerText || el.textContent || '').trim().replace(/\\s+/g, ' ').slice(0, 100);
+        const visibleText = (el) => (el.innerText || el.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 100);
         const accessibleName = (el) => {
           const labelledBy = (el.getAttribute('aria-labelledby') || '')
-            .split(/\\s+/).filter(Boolean)
+            .split(/\s+/).filter(Boolean)
             .map((id) => document.getElementById(id)?.textContent?.trim() || '').join(' ').trim();
           const explicitLabel = el.labels && Array.from(el.labels).map(visibleText).join(' ').trim();
           return el.getAttribute('aria-label') || labelledBy || explicitLabel ||
