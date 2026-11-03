@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "three": "^0.128.0"
+  },
+  "name": "zh-case-configurator",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ZH — конфигуратор кожаного чехла для падел-ракетки",
+  "scripts": {
+    "start": "node server.js",
+    "check": "node checks/markup-check.js && node checks/page-run.js && SOFT=1 node checks/page-run.js && NOGL=1 node checks/page-run.js && GLBLANK=1 node checks/page-run.js && node checks/scene-check.js",
+    "shot": "node checks/render.js preview-soft.png navy && node checks/render-soft.js preview-page.png",
+    "bench": "node checks/bench-soft.js",
+    "shot:page": "node checks/shot.js",
+    "build:site": "node checks/build-standalone.js ../artifacts-stage1.html --static"
+  }
+}

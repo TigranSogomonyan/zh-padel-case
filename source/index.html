@@ -1,0 +1,2392 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ZH — Padel Racket Case</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Golos+Text:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script>
+/* ?shot=1 — режим для снимка: готовый кадр показывается сразу, без
+   проявления, и страница не крутит бесконечный цикл. Иначе браузер снимает
+   середину перехода, а с бесконечным циклом вообще не считает страницу
+   готовой и виснет. */
+(function(){
+  var c=[];
+  if(/[?&]shot\b/.test(location.search)) c.push("shot");
+  /* ?bare=1 — только сцена, без шапки, спецификации и заказа: страницу в
+     таком виде удобно вставлять окном в другую страницу */
+  if(/[?&]bare\b/.test(location.search)) c.push("bare");
+  var root=document.documentElement;
+  if(root&&c.length) root.className=c.join(" ");
+})();
+</script>
+<style>
+/* =========================================================== основа
+   Одна тёмная тема, выбранная сознательно: витрина мастерской. Нейтральные
+   тона уведены в синий графит — под кожу, а не в чистый серый. Цвет на
+   странице только один и он принадлежит вещи: шесть образцов кожи. */
+:root{
+  color-scheme:dark;
+
+  --ink:#07080A;          /* фон страницы */
+  --pit:#0C0E12;          /* сцена */
+  --panel:#101319;        /* панель управления */
+  --raise:#151920;        /* приподнятые поверхности */
+  --bone:#EDEDEA;         /* основной текст, чуть тёплый */
+  --muted:#8B8F98;
+  --dim:#585D67;
+  --line:rgba(237,237,234,.13);
+  --line-2:rgba(237,237,234,.07);
+  --warn:#D98A6A;
+
+  --display:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+  --ui:"Golos Text","Helvetica Neue",Arial,sans-serif;
+  --data:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+
+  /* шкала кегля и шаг сетки: всё остальное берётся отсюда */
+  --t-micro:10px; --t-xs:11px; --t-s:13px; --t-m:15px; --t-l:18px;
+  --u:8px;
+  --frame:1320px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--ink);color:var(--bone);font-family:var(--ui);
+  font-size:var(--t-m);line-height:1.55;-webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;overflow-x:hidden}
+button,input,textarea,select{font:inherit;color:inherit;background:transparent}
+button{cursor:pointer;border:none}
+::selection{background:var(--bone);color:var(--ink)}
+:focus-visible{outline:1px solid var(--bone);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* Chrome красит автозаполненные поля своим светлым фоном — отменяется
+   только внутренней тенью во всю высоту */
+input:-webkit-autofill,input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,textarea:-webkit-autofill{
+  -webkit-box-shadow:inset 0 0 0 100px var(--panel);
+  -webkit-text-fill-color:var(--bone);
+  caret-color:var(--bone);
+  transition:background-color 9999s ease-out}
+
+.wrap{max-width:var(--frame);margin:0 auto;padding:0 calc(var(--u)*4)}
+
+/* микро-надписи: единый регистр для всех служебных подписей */
+.eyebrow,.legend>span,.field>label>span,.fld span,.spec dt,.views button,.hint,
+.count,.pair small,.btn,.top .meta{
+  font-size:var(--t-micro);letter-spacing:.22em;text-transform:uppercase}
+
+/* ============================================================ шапка */
+.top{display:flex;align-items:center;justify-content:space-between;gap:calc(var(--u)*3);
+  padding:calc(var(--u)*3.5) 0 calc(var(--u)*2.5);border-bottom:1px solid var(--line)}
+.mark{font-family:var(--display);font-size:26px;letter-spacing:.2em;
+  text-transform:uppercase;line-height:1}
+.top .meta{color:var(--muted)}
+.top .meta b{color:var(--bone);font-weight:400}
+
+/* ============================================================= лид */
+.lede{padding:calc(var(--u)*8) 0 calc(var(--u)*5);
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,26ch);
+  gap:calc(var(--u)*6);align-items:end}
+.eyebrow{color:var(--muted);display:flex;align-items:center;gap:var(--u)}
+.eyebrow::after{content:"";flex:1;height:1px;background:var(--line)}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(40px,5.6vw,66px);
+  line-height:1.02;letter-spacing:-.01em;text-wrap:balance;margin-top:calc(var(--u)*2.5)}
+h1 em{font-style:italic;color:var(--muted)}
+.lede p{color:var(--muted);font-size:var(--t-s);line-height:1.7;text-wrap:pretty}
+
+/* ========================================================== студия */
+.studio{display:grid;grid-template-columns:minmax(0,1fr) 384px;
+  border:1px solid var(--line);background:var(--pit)}
+.stage{position:relative;min-height:min(76vh,720px);
+  background:
+    /* пятно света за вещью, как фон на предметной съёмке: тени есть на что лечь */
+    radial-gradient(38% 44% at 55% 50%, rgba(150,158,172,.15) 0%, rgba(150,158,172,0) 100%),
+    radial-gradient(120% 90% at 50% -6%, #2A2E36 0%, #15181D 46%, #08090C 100%)}
+.stage canvas{display:block;width:100%;height:100%;touch-action:none;
+  opacity:0;transition:opacity .7s ease}
+.stage.ready canvas{opacity:1}
+.shot .stage canvas{opacity:1;transition:none}
+.shot .load{display:none}
+.bare .top,.bare .lede,.bare .specs,.bare .order{display:none}
+.bare .wrap{padding:0;max-width:none}
+.bare .studio{border:none;grid-template-columns:1fr}
+.bare .panel{display:none}
+.bare .stage{min-height:100vh}
+.bare .hint,.bare .dims{font-size:9px}
+
+.load{position:absolute;inset:0;display:grid;place-items:center;
+  font-size:var(--t-micro);letter-spacing:.26em;text-transform:uppercase;
+  color:var(--dim);transition:opacity .4s}
+.stage.ready .load{opacity:0;pointer-events:none}
+
+/* сегментный выбор ракурса */
+.views{position:absolute;left:calc(var(--u)*3);top:calc(var(--u)*2.5);
+  display:flex;gap:1px;z-index:2;background:var(--line-2);
+  border:1px solid var(--line);border-radius:2px;overflow:hidden}
+.views button{padding:9px 14px;color:var(--dim);background:rgba(8,9,12,.62);
+  transition:color .16s,background .16s}
+.views button:hover{color:var(--bone)}
+.views button[aria-pressed="true"]{color:var(--ink);background:var(--bone)}
+#softBtn{color:var(--warn)}
+
+.hint{position:absolute;left:calc(var(--u)*3);bottom:calc(var(--u)*2.5);
+  max-width:56%;color:var(--dim);line-height:1.7;pointer-events:none;transition:opacity .5s}
+.dims{position:absolute;right:calc(var(--u)*3);bottom:calc(var(--u)*2.5);
+  text-align:right;font-family:var(--data);font-size:var(--t-xs);
+  font-variant-numeric:tabular-nums;letter-spacing:.02em;color:var(--dim);
+  pointer-events:none;line-height:1.8}
+.dims b{display:block;color:var(--muted);font-weight:400}
+
+/* ========================================================== панель */
+.panel{background:var(--panel);border-left:1px solid var(--line);
+  padding:0 calc(var(--u)*3.5) calc(var(--u)*4);
+  overflow-y:auto;max-height:min(76vh,720px);scrollbar-width:thin}
+.field{padding:calc(var(--u)*3) 0;border-bottom:1px solid var(--line-2)}
+.field:last-of-type{border-bottom:none}
+.field>label,.legend{display:flex;align-items:baseline;justify-content:space-between;
+  gap:calc(var(--u)*1.5);color:var(--muted);margin-bottom:calc(var(--u)*1.75)}
+.legend b{color:var(--bone);font-family:var(--display);font-size:var(--t-l);
+  font-weight:400;letter-spacing:.02em;text-transform:none}
+.legend i,label i{font-style:normal;color:var(--bone);font-family:var(--data);
+  font-size:var(--t-xs);font-variant-numeric:tabular-nums;letter-spacing:.04em}
+
+.swatches{display:grid;grid-template-columns:repeat(6,1fr);gap:calc(var(--u)*1.25)}
+.sw{aspect-ratio:1;border-radius:50%;position:relative;transition:transform .18s;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.16), inset 0 -6px 12px rgba(0,0,0,.55)}
+.sw:hover{transform:scale(1.08)}
+.sw[aria-pressed="true"]::after{content:"";position:absolute;inset:-5px;
+  border-radius:50%;border:1px solid var(--bone)}
+
+.inits{width:100%;border:none;border-bottom:1px solid var(--line);
+  padding:2px 0 10px;font-family:var(--display);font-size:46px;line-height:1.1;
+  letter-spacing:.2em;text-indent:.2em;text-align:center;text-transform:uppercase}
+.inits:focus{outline:none;border-bottom-color:var(--bone)}
+.inits::placeholder{color:var(--dim)}
+.count{margin-top:calc(var(--u)*1.25);color:var(--muted);text-align:center;line-height:1.7}
+
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.seg.two{grid-template-columns:repeat(2,1fr)}
+.seg button{padding:11px 6px;border:1px solid var(--line);border-radius:2px;
+  background:var(--raise);font-size:var(--t-s);color:var(--muted);transition:.16s}
+.seg button:hover{border-color:var(--muted);color:var(--bone)}
+.seg button[aria-pressed="true"]{border-color:var(--bone);background:var(--bone);color:var(--ink)}
+.seg.serif button{font-family:var(--display);font-size:20px;padding:7px 6px}
+
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:1px;
+  background:var(--line);margin:calc(var(--u)*1.5) 0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;
+  border-radius:50%;background:var(--bone);cursor:grab;
+  box-shadow:0 0 0 4px rgba(237,237,234,.10)}
+input[type=range]::-moz-range-thumb{width:15px;height:15px;border:none;border-radius:50%;
+  background:var(--bone);cursor:grab}
+input[type=range]:active::-webkit-slider-thumb{cursor:grabbing}
+
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:calc(var(--u)*2.5)}
+.pair small{display:block;color:var(--muted)}
+
+.actions{display:flex;gap:calc(var(--u)*1.25);padding-top:calc(var(--u)*3)}
+.btn{flex:1;padding:15px 12px;border-radius:2px;transition:.16s;text-align:center}
+.btn-a{background:var(--bone);color:var(--ink);font-weight:500}
+.btn-a:hover{background:#fff}
+.btn-b{border:1px solid var(--line);color:var(--muted)}
+.btn-b:hover{border-color:var(--bone);color:var(--bone)}
+
+/* ==================================================== спецификация */
+.specs{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin:0;
+  background:var(--line-2);border:1px solid var(--line);border-top:none}
+.spec{background:var(--ink);padding:calc(var(--u)*3.5) calc(var(--u)*3)}
+.spec dt{color:var(--muted);margin-bottom:calc(var(--u)*1.25)}
+.spec dd{font-family:var(--display);font-size:26px;line-height:1.15;
+  font-variant-numeric:tabular-nums}
+.spec dd small{display:block;font-family:var(--ui);font-size:var(--t-s);
+  line-height:1.6;color:var(--muted);margin-top:calc(var(--u)*.75);
+  letter-spacing:0;text-transform:none}
+
+/* =========================================================== заказ */
+.order{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:calc(var(--u)*8);padding:calc(var(--u)*9) 0 calc(var(--u)*12);
+  border-top:1px solid var(--line);margin-top:calc(var(--u)*8)}
+.order h2{font-family:var(--display);font-weight:400;
+  font-size:clamp(30px,3.6vw,44px);line-height:1.04;text-wrap:balance;
+  margin-top:calc(var(--u)*2)}
+.order-copy p{margin-top:calc(var(--u)*2);color:var(--muted);
+  font-size:var(--t-s);line-height:1.7;max-width:46ch;text-wrap:pretty}
+
+/* сводка — как чек: подпись слева, значение справа, между ними линия */
+.summary{margin-top:calc(var(--u)*4);border-top:1px solid var(--line)}
+.summary div{display:grid;grid-template-columns:auto 1fr auto;align-items:baseline;
+  gap:calc(var(--u)*1.5);padding:calc(var(--u)*1.5) 0;
+  border-bottom:1px solid var(--line-2);font-size:var(--t-s)}
+.summary div::after{content:"";grid-column:2;height:1px;background:var(--line-2);
+  transform:translateY(-3px)}
+.summary dt{color:var(--muted);grid-column:1}
+.summary dd{grid-column:3;text-align:right;font-family:var(--data);
+  font-size:var(--t-xs);font-variant-numeric:tabular-nums;letter-spacing:.02em}
+
+.order-form{display:grid;gap:calc(var(--u)*3);align-content:start}
+.fld{display:grid;gap:var(--u)}
+.fld span{color:var(--muted);display:flex;justify-content:space-between;gap:var(--u)}
+.fld i{font-style:normal;letter-spacing:.12em;color:var(--dim)}
+.fld input,.fld textarea{border:none;border-bottom:1px solid var(--line);
+  padding:10px 0;font-size:var(--t-m);border-radius:0;resize:vertical}
+.fld input:focus,.fld textarea:focus{outline:none;border-bottom-color:var(--bone)}
+.fld input.bad,.fld textarea.bad{border-bottom-color:var(--warn)}
+.order-actions{display:flex;gap:calc(var(--u)*1.25);margin-top:var(--u)}
+.order-status{min-height:1.5em;font-size:var(--t-s);color:var(--muted);line-height:1.6}
+.order-status.err{color:var(--warn)}
+.order-status.ok{color:var(--bone)}
+
+/* ======================================================== заглушка */
+.fallback{position:absolute;inset:0;display:grid;align-content:center;justify-items:start;
+  gap:calc(var(--u)*1.75);padding:calc(var(--u)*3) clamp(18px,5vw,44px);
+  overflow-y:auto;max-width:100%;min-width:0}
+.fallback>*{max-width:56ch;min-width:0}
+.fallback b{font-family:var(--display);font-weight:400;
+  font-size:clamp(22px,3.4vw,28px);line-height:1.15}
+.fallback p,.fallback ol{color:var(--muted);font-size:var(--t-s);line-height:1.65}
+.fallback ol{padding-left:18px}
+.fallback code{display:block;font-family:var(--data);font-size:var(--t-xs);
+  color:var(--dim);border:1px solid var(--line-2);padding:9px 11px;border-radius:2px;
+  overflow-wrap:anywhere;white-space:pre-wrap}
+.fallback button{margin-top:2px;padding:12px 22px;border:1px solid var(--bone);
+  background:var(--bone);color:var(--ink);border-radius:2px;
+  font-size:var(--t-micro);letter-spacing:.2em;text-transform:uppercase;font-weight:500}
+
+/* ========================================================= экраны */
+@media(max-width:1080px){
+  .studio{grid-template-columns:1fr}
+  .panel{border-left:none;border-top:1px solid var(--line);max-height:none}
+  .stage{min-height:64vh}
+  .specs{grid-template-columns:repeat(2,1fr)}
+  .lede{grid-template-columns:1fr;gap:calc(var(--u)*3);align-items:start}
+  .order{grid-template-columns:1fr;gap:calc(var(--u)*5);
+    padding:calc(var(--u)*6) 0 calc(var(--u)*9)}
+  .hint{max-width:100%}
+  .dims{display:none}
+}
+@media(max-width:560px){
+  .wrap{padding:0 calc(var(--u)*2)}
+  .lede{padding:calc(var(--u)*5) 0 calc(var(--u)*3)}
+  .specs{grid-template-columns:1fr}
+  .views{left:var(--u);top:var(--u)}
+  .views button{padding:8px 10px}
+}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="mark">ZH</div>
+    <div class="meta">Padel racket case · <b>made to order</b></div>
+  </header>
+
+  <section class="lede">
+    <div>
+      <div class="eyebrow">Personalisation</div>
+      <h1>Your initials,<br><em>pressed into the hide</em></h1>
+    </div>
+    <p>A soft, unlined sleeve in full-grain leather, corded along the seam, with
+       two D-rings on the back for the detachable strap. Choose a colour, type
+       your initials, and set the impression wherever you want it.</p>
+  </section>
+
+  <main class="studio">
+    <div class="stage" id="stage">
+      <div class="load">Cutting the leather…</div>
+      <div class="views" id="views">
+        <button data-view="hero" aria-pressed="true">Three-quarter</button>
+        <button data-view="front" aria-pressed="false">Front</button>
+        <button data-view="edge" aria-pressed="false">Profile</button>
+        <button data-view="back" aria-pressed="false">Back</button>
+      </div>
+      <div class="hint" id="hint">Drag to rotate · drag the initials to move them · scroll to zoom</div>
+      <div class="dims"><b>284 × 497 × 46 mm</b>fits a 455 × 260 × 38 racket</div>
+    </div>
+
+    <aside class="panel">
+      <div class="field">
+        <div class="legend"><span>Leather</span><b id="hideName">Navy</b></div>
+        <div class="swatches" id="swatches"></div>
+      </div>
+
+      <div class="field">
+        <div class="legend"><span>Shoulder strap</span></div>
+        <div class="seg two" id="strap">
+          <button data-v="on" aria-pressed="true">Clipped on</button>
+          <button data-v="off" aria-pressed="false">Taken off</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="inits"><span>Initials</span></label>
+        <input class="inits" id="inits" maxlength="3" placeholder="AB" value="AB" autocomplete="off" spellcheck="false">
+        <div class="count" id="count">up to three characters · Latin or Cyrillic</div>
+      </div>
+
+      <div class="field">
+        <div class="legend"><span>Die typeface</span></div>
+        <div class="seg serif" id="face">
+          <button data-v="serif" aria-pressed="true">Ab</button>
+          <button data-v="grot" aria-pressed="false" style="font-family:var(--ui);font-size:14px">Ab</button>
+          <button data-v="mono" aria-pressed="false" style="font-family:ui-monospace,Menlo,monospace;font-size:14px">Ab</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="size"><span>Impression size</span><i id="sizeVal">28 mm</i></label>
+        <input type="range" id="size" min="14" max="60" value="28" step="1">
+      </div>
+
+      <div class="field">
+        <div class="legend"><span>Impression position</span><i id="posVal">0 · 88</i></div>
+        <div class="pair">
+          <div><small>Across</small><input type="range" id="posX" min="-120" max="120" value="0" step="1"></div>
+          <div><small>Along</small><input type="range" id="posY" min="-215" max="205" value="88" step="1"></div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-a" id="save">Save preview</button>
+        <button class="btn btn-b" id="reset">Reset</button>
+      </div>
+    </aside>
+  </main>
+
+  <dl class="specs">
+    <div class="spec"><dt>Body</dt><dd>Soft sleeve<small>3 mm foam, no rigid shell</small></dd></div>
+    <div class="spec"><dt>Cover</dt><dd>1.2 mm leather<small>pebble grain, 2.2 mm scale</small></dd></div>
+    <div class="spec"><dt>Edge</dt><dd>Corded welt<small>3 mm cord, whole perimeter</small></dd></div>
+    <div class="spec"><dt>Mounts</dt><dd>Two D-rings<small>leather keepers stitched to the back</small></dd></div>
+    <div class="spec"><dt>Strap</dt><dd>Detachable<small>25 mm webbing, steel slider, two snap hooks</small></dd></div>
+    <div class="spec"><dt>Size</dt><dd>284 × 497 × 46<small>millimetres, fits 455 × 260 × 38</small></dd></div>
+    <div class="spec"><dt>Impression</dt><dd>Blind deboss<small>die-pressed, 0.4 mm deep</small></dd></div>
+    <div class="spec"><dt>Care</dt><dd>Wipe and feed<small>leather balm, never machine wash</small></dd></div>
+  </dl>
+
+  <section class="order" id="order">
+    <div class="order-copy">
+      <div class="eyebrow">Order</div>
+      <h2>Send the configuration</h2>
+      <p>Everything set in the studio above travels with the request — colour,
+         initials, die and its exact placement in millimetres. We reply with the price
+         and the lead time before anything is cut.</p>
+      <dl class="summary" id="summary"></dl>
+    </div>
+
+    <form class="order-form" id="orderForm" novalidate>
+      <label class="fld"><span>Name</span>
+        <input id="ordName" name="name" autocomplete="name" required></label>
+      <label class="fld"><span>Email</span>
+        <input id="ordMail" name="email" type="email" autocomplete="email" required></label>
+      <label class="fld"><span>Telegram or phone<i>optional</i></span>
+        <input id="ordTg" name="contact" autocomplete="tel"></label>
+      <label class="fld"><span>Anything to add<i>optional</i></span>
+        <textarea id="ordNote" name="note" rows="3"></textarea></label>
+      <div class="order-actions">
+        <button class="btn btn-a" type="submit" id="ordSend">Send the request</button>
+        <button class="btn btn-b" type="button" id="ordCopy">Copy the spec</button>
+      </div>
+      <p class="order-status" id="ordStatus" role="status" aria-live="polite"></p>
+    </form>
+  </section>
+</div>
+
+<script>
+window.__zhFail=function(title,detail){
+  var st=document.getElementById("stage"); if(!st) return;
+  st.classList.add("ready");
+  st.innerHTML='<div class="fallback"><b>'+title+'</b>'+
+    '<p>Send this text over and it can be fixed precisely.</p>'+
+    '<code>'+String(detail).replace(/[<>&]/g,' ').slice(0,400)+'</code></div>';
+};
+window.addEventListener("error",function(e){
+  window.__zhFail("Something broke",
+    (e.message||"error")+(e.filename?"  @ "+e.filename.split("/").pop()+":"+e.lineno:""));
+});
+window.addEventListener("unhandledrejection",function(e){
+  window.__zhFail("Something broke", (e.reason&&e.reason.message)||e.reason||"promise rejected");
+});
+</script>
+<script>
+/* ====================================================== форма заказа
+   Ни строки про three: 3D может не подняться, а заказ должен уходить.
+   Куда уходит заявка — заполни одно из двух:
+     ORDER_ENDPOINT — URL, принимающий POST с JSON;
+     ORDER_MAIL     — почта, тогда откроется почтовый клиент.
+   Пока оба пустые, форма прямо говорит, что отправка не подключена,
+   и кладёт заявку в буфер обмена.                                    */
+(function(){
+"use strict";
+/* Адрес приёмника заявок. Переопределяется снаружи — этим пользуются
+   прогоны и другой хост при выкладке. */
+var ORDER_ENDPOINT=(typeof window!=="undefined" && window.__ZH_ORDER_ENDPOINT)
+                   || "/api/orders";      // тот же хост, что и страница
+var ORDER_MAIL="";
+
+var SPEC={
+  product:"ZH padel racket case, soft",
+  leather:"Navy",
+  initials:"AB",
+  typeface:"Cormorant, serif",
+  impression:"28 mm",
+  placement:"0 mm across, 88 mm along",
+  strap:"detachable, 25 mm webbing",
+  size:"284 × 497 × 46 mm"
+};
+var LABEL={leather:"Leather",initials:"Initials",
+  typeface:"Die typeface",impression:"Impression size",placement:"Placement",
+  strap:"Strap",size:"Size"};
+var ROWS=["leather","initials","typeface","impression","placement","strap","size"];
+
+function esc(s){ return String(s).replace(/[<>&]/g,""); }
+function fill(){
+  var el=document.getElementById("summary"); if(!el) return;
+  el.innerHTML=ROWS.map(function(k){
+    return "<div><dt>"+LABEL[k]+"</dt><dd>"+esc(SPEC[k])+"</dd></div>";
+  }).join("");
+}
+window.__zhSetSpec=function(o){ for(var k in o) SPEC[k]=o[k]; fill(); };
+
+function specText(){
+  return Object.keys(SPEC).map(function(k){ return k+": "+SPEC[k]; }).join("\n");
+}
+var status=document.getElementById("ordStatus");
+function say(msg,cls){ status.textContent=msg; status.className="order-status"+(cls?" "+cls:""); }
+function copy(text){
+  if(navigator.clipboard&&navigator.clipboard.writeText)
+    return navigator.clipboard.writeText(text);
+  return new Promise(function(res,rej){
+    var t=document.createElement("textarea");
+    t.value=text; t.style.position="fixed"; t.style.opacity="0";
+    document.body.appendChild(t); t.select();
+    var ok=false; try{ ok=document.execCommand("copy"); }catch(e){}
+    document.body.removeChild(t);
+    ok?res():rej(new Error("clipboard refused"));
+  });
+}
+
+fill();
+document.getElementById("ordCopy").onclick=function(){
+  copy(specText())
+    .then(function(){ say("The spec is on the clipboard.","ok"); })
+    .catch(function(){ say("The browser blocked the clipboard. Select the list on the left and copy it by hand.","err"); });
+};
+document.getElementById("orderForm").addEventListener("submit",function(e){
+  e.preventDefault();
+  var name=document.getElementById("ordName"), mail=document.getElementById("ordMail");
+  var bad=[];
+  if(!name.value.trim()) bad.push(name);
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail.value.trim())) bad.push(mail);
+  [name,mail].forEach(function(f){ f.classList.remove("bad"); });
+  if(bad.length){
+    bad.forEach(function(f){ f.classList.add("bad"); });
+    bad[0].focus();
+    say("A name and a working email, please.","err");
+    return;
+  }
+  var payload={
+    name:name.value.trim(), email:mail.value.trim(),
+    contact:document.getElementById("ordTg").value.trim(),
+    note:document.getElementById("ordNote").value.trim(),
+    spec:JSON.parse(JSON.stringify(SPEC)), sentAt:new Date().toISOString()
+  };
+  /* Картинка настроенной вещи снимается со сцены и уходит вместе с заявкой:
+     в канале заявку видно, а не только читают. Если превью недоступно
+     (нет 3D, чужая канва), заявка уходит без него. */
+  var shot=window.__zhSnapshot && window.__zhSnapshot();
+  if(shot) payload.preview=shot;
+  var body=specText()+"\n\nname: "+payload.name+"\nemail: "+payload.email+
+           (payload.contact?"\ncontact: "+payload.contact:"")+
+           (payload.note?"\n\n"+payload.note:"");
+  var btn=document.getElementById("ordSend");
+
+  if(ORDER_ENDPOINT){
+    btn.disabled=true; say("Sending…");
+    fetch(ORDER_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json"},
+                          body:JSON.stringify(payload)})
+      .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); })
+      .then(function(){
+        btn.disabled=false;
+        say("Sent. We answer to "+payload.email+" with the price and the lead time.","ok");
+        document.getElementById("orderForm").reset();
+      })
+      .catch(function(err){
+        btn.disabled=false;
+        copy(body).catch(function(){});
+        say("The request did not go through ("+err.message+"). The whole thing is on your clipboard — send it over any way you like.","err");
+      });
+    return;
+  }
+  if(ORDER_MAIL){
+    location.href="mailto:"+ORDER_MAIL+"?subject="+
+      encodeURIComponent("ZH case — "+SPEC.leather+
+        (SPEC.initials!=="none"?" — "+SPEC.initials:""))+
+      "&body="+encodeURIComponent(body);
+    say("Your mail client should be open with everything filled in.","ok");
+    return;
+  }
+  copy(body)
+    .then(function(){ say("Sending is not wired up on this copy of the page yet — the whole request is on your clipboard.","ok"); })
+    .catch(function(){ say("Sending is not wired up on this copy of the page yet, and the browser blocked the clipboard. Copy the list on the left by hand.","err"); });
+});
+})();
+</script>
+<!-- three со своего хоста; cdnjs остаётся запасным, если файл открыли прямо из папки -->
+<script src="vendor/three.min.js"></script>
+<script>
+if(typeof THREE==="undefined")
+  document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous">\x3C/script>');
+</script>
+<script>
+(function(){
+"use strict";
+
+if(typeof THREE==="undefined"){
+  window.__zhFail("3D library did not load",
+    "three.js could not be fetched from cdnjs. A blocked CDN, an ad blocker or "+
+    "an offline machine will all do this. Host three.min.js next to this file and "+
+    "point the script tag at it.");
+  return;
+}
+
+const HIDES=[
+  {id:"navy",    name:"Navy",     hex:0x22304A},
+  {id:"aqua",    name:"Aqua",     hex:0x5CBDB4},
+  {id:"burgundy",name:"Burgundy", hex:0x63202A},
+  {id:"orange",  name:"Orange",   hex:0xC85A1E},
+  {id:"brown",   name:"Brown",    hex:0x6B4429},
+  {id:"white",   name:"White",    hex:0xE6E1D8}
+];
+/* Кожа у вещи одна — мелкий флотар по снятой карте рельефа Leather037
+   (ambientCG, CC0). Прежние процедурные выделки оставлены в коде и
+   переключаются адресом (?leather=pebble|smooth|saffiano): это инструмент
+   для сравнения, а не выбор для покупателя, поэтому в панели его нет. */
+const LEATHER=(location.search.match(/[?&]leather=(l037|smooth|pebble|saffiano)/)||[])[1]||"l037";
+const state={hide:HIDES[0], finish:LEATHER, initials:"AB", face:"serif", size:28,
+             pos:{x:0,y:88}, strap:true};
+const MM={w:284,l:497,t:46};
+/* мягкий чехол: тонкий, сечение площе эллипса, поверхность слегка неровная */
+const H=MM.t/2, R_EDGE=15, SOFT_M=2.9, PUFF=0.9, TILE_MM=55;
+/* Плитка развёртки берётся у выделки: процедурные считаются под 55 мм,
+   у снятой карты свой масштаб. Ставит assemble() до сборки оболочки. */
+let tileMM=TILE_MM;
+function mixHex(a,b,t){ return new THREE.Color(a).lerp(new THREE.Color(b),t).getHex(); }
+
+/* =========================================================== рендерер */
+const stage=document.getElementById("stage");
+
+function noWebGL(reason){
+  stage.classList.add("ready");
+  stage.innerHTML='<div class="fallback">'+
+    '<b>Preview unavailable</b>'+
+    '<p>This browser gave us neither a WebGL context nor a 2D one, and the '+
+    'preview needs at least one of them. Without WebGL the page falls back to '+
+    'drawing the case itself on a plain canvas, so this screen means even that '+
+    'was refused \u2014 which is rare.</p>'+
+    '<ol><li>Download the file and open it in its own browser tab \u2014 an embedded '+
+    'preview is the most common place this fails.</li>'+
+    '<li>Reload the page; try another browser.</li>'+
+    '<li>Everything else on this page works regardless: the specification below '+
+    'and the order form both run without any preview.</li></ol>'+
+    '<code>'+String(reason).replace(/[<>&]/g,'')+'</code>'+
+    '<button onclick="location.reload()">Try again</button></div>';
+}
+
+/* Рендерера два. Основной — WebGL. Если контекст не создаётся (а на части
+   машин он не создаётся никогда), включается свой растеризатор на canvas 2D:
+   та же геометрия, тот же свет, z-буфер и текстуры кожи руками. Медленнее,
+   но конфигуратор работает, а не показывает извинения. */
+let renderer=null, SOFT=null, MODE="gl", GLFAIL="";
+/* По умолчанию WebGL не трогается вовсе: на части машин само создание
+   контекста роняет вкладку. Кому он нужен — открывает страницу с ?gl=1. */
+const FORCE_SOFT=!/[?&]gl\b/.test(location.search);
+try{
+  if(FORCE_SOFT) throw new Error("GPU path not requested (add ?gl=1 to try it)");
+  const probe=document.createElement("canvas");
+  const gl=probe.getContext("webgl2")||probe.getContext("webgl")||probe.getContext("experimental-webgl");
+  if(!gl) throw new Error("WebGL context could not be created");
+  const ext=gl.getExtension("WEBGL_lose_context"); if(ext) ext.loseContext();
+  renderer=new THREE.WebGLRenderer({
+    antialias:devicePixelRatio<2,          // на плотных экранах сглаживание лишнее и стоит памяти
+    alpha:true,
+    powerPreference:"default"
+    // preserveDrawingBuffer убран: экономит целый буфер кадра, а превью
+    // сохраняется рендером непосредственно перед toDataURL в том же такте
+  });
+}catch(err){
+  MODE="soft";
+  GLFAIL=(err&&err.message)?err.message:String(err);
+}
+if(MODE==="gl"){
+  renderer.setPixelRatio(Math.min(devicePixelRatio,1.75));
+  renderer.outputEncoding=THREE.sRGBEncoding;
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure=1.04;
+  stage.appendChild(renderer.domElement);
+  renderer.domElement.addEventListener("webglcontextlost",function(e){
+    e.preventDefault();
+    switchToSoft("WebGL context lost");        // контекст отобрали на ходу
+  });
+}else{
+  try{ SOFT=makeSoft(stage); }
+  catch(err2){                                  // нет и 2D — вот тогда извинения
+    noWebGL(GLFAIL+" / "+((err2&&err2.message)||err2));
+    return;
+  }
+}
+const MAXAF=(MODE==="gl")?renderer.capabilities.getMaxAnisotropy():1;
+/* тесселяция: программному растеризатору столько треугольников не нужно */
+function lodFor(m){
+  return (m==="gl")
+    ? {shellN:288,shellM:32,cap:14,welt:640,mount:56,strap:180,tail:40,tex:1024}
+    : {shellN:288,shellM:28,cap:12,welt:520,mount:40,strap:150,tail:28,tex:768};
+}
+let LOD=lodFor(MODE);
+
+/* ============================================ растеризатор на canvas 2D
+   Обходит сцену, переводит треугольники в мир, отсекает обратные и рисует
+   с z-буфером. Свет — тот же набор направленных источников, что и в WebGL.
+
+   Два прохода. Пока крутят — быстрый: половина разрешения, плоское
+   затенение по грани. Как только отпустили — чистовой: полное разрешение
+   экрана (на плотных дисплеях вдвое больше точек, чем CSS-пикселей),
+   нормали интерполируются по вершинам, текстуры берутся билинейно, а
+   рельеф кожи снимается с карты нормалей через касательную к треугольнику.
+   Отсюда и разница в цене кадра: десятки миллисекунд против сотен.      */
+function makeSoft(host){
+  const cv=document.createElement("canvas");
+  cv.style.display="block"; cv.style.width="100%"; cv.style.height="100%";
+  cv.style.touchAction="none";
+  host.appendChild(cv);
+  const ctx=cv.getContext("2d");
+  if(!ctx) throw new Error("2D canvas is unavailable too");
+
+  const LIGHTS=[[-400,700,780,1.50],[-150,760,300,.42],[680,150,420,.22],[230,-430,-600,.30]]
+    .map(function(l){
+      const n=Math.hypot(l[0],l[1],l[2]);
+      return {x:l[0]/n,y:l[1]/n,z:l[2]/n,i:l[3]};
+    });
+  const AMB=.34;
+  const WRAP=.22;                              // насколько свет заходит за кромку
+  /* Рельеф глушим: карты нормалей считались под аппаратный рендер с
+     мип-уровнями, а здесь один тексель на пиксель — во всю силу это не
+     кожа, а рябь. */
+  const BUMP_SOFT=.42;
+  const DEC=new Float32Array(256);             // sRGB → линейный, для текстур
+  for(let i=0;i<256;i++) DEC[i]=Math.pow(i/255,2.2);
+  /* Гамма — по таблице: три Math.pow на пиксель стоят дороже всей
+     остальной арифметики вместе взятой. */
+  const GN=4096, GAM=new Float32Array(GN+1);
+  for(let i=0;i<=GN;i++) GAM[i]=Math.pow(i/GN,1/2.2);
+  const enc=function(v){                       // линейный → sRGB
+    if(v<=0) return 0;
+    if(v>=1) return 255;
+    const f=v*GN, i=f|0;
+    return (GAM[i]+(GAM[i+1]-GAM[i])*(f-i))*255;
+  };
+  /* На плотном экране чистовой кадр считается прямо в точках устройства —
+     этого хватает, лесенки не видно. На обычном экране точек вдвое меньше,
+     поэтому кадр считается в двойном размере и усредняется: настоящее
+     сглаживание. Цена одинаковая — четыре выборки на CSS-пиксель. */
+  const DPR=Math.min(devicePixelRatio||1,2);
+  const K_FINE=(DPR>=1.5)?DPR:1, SS_FINE=(DPR>=1.5)?1:2, K_FAST=.75;
+
+  let W=0,H=0,CW=0,CH=0,scale=K_FAST,fine=false,ss=1;
+  let col=null,zbf=null,idata=null;
+  let tris=null,dyn=null,rev=0;
+
+  function alloc(w,h,s){
+    if(w===W&&h===H&&s===ss) return;
+    W=w; H=h; ss=s;
+    cv.width=W; cv.height=H;
+    idata=ctx.createImageData(W,H);
+    col=(ss>1)?new Uint8ClampedArray(W*ss*H*ss*4):idata.data;
+    zbf=new Float32Array(W*ss*H*ss);
+  }
+  function apply(){
+    alloc(Math.max(1,Math.round(CW*scale)),Math.max(1,Math.round(CH*scale)),fine?SS_FINE:1);
+  }
+  function setSize(w,h){ CW=w; CH=h; apply(); }
+  function setQuality(q){                       // q<1 — быстрый проход
+    const want=(q>=1)?K_FINE:K_FAST*Math.min(1,q/.52);
+    const wasFine=fine;
+    fine=(q>=1);
+    if(Math.abs(want-scale)<1e-6 && wasFine===fine) return;
+    scale=want; apply();
+  }
+  /* усреднение из увеличенного буфера в кадр канвы */
+  function resolve(){
+    if(ss===1) return;
+    const d=idata.data, RW=W*ss;
+    for(let y=0;y<H;y++) for(let x=0;x<W;x++){
+      let r=0,g=0,b=0,a=0;
+      for(let j=0;j<ss;j++){
+        let o=(((y*ss+j)*RW)+x*ss)*4;
+        for(let i=0;i<ss;i++,o+=4){ r+=col[o]; g+=col[o+1]; b+=col[o+2]; a+=col[o+3]; }
+      }
+      const n=ss*ss, k=(y*W+x)*4;
+      d[k]=r/n; d[k+1]=g/n; d[k+2]=b/n; d[k+3]=a/n;
+    }
+  }
+
+  /* Пиксели текстуры и пирамида уменьшенных копий. Без неё зерно кожи
+     размером в миллиметр на общем плане приходится меньше пикселя и
+     рассыпается в шум: это не кожа, а рябь. Уровень выбирается по тому,
+     сколько текселей приходится на пиксель у конкретного треугольника. */
+  function texPix(t){
+    if(!t||!t.image||!t.image.width) return null;
+    if(t.__px&&t.__ver===t.version) return t.__px;
+    let d;
+    try{ d=t.image.getContext("2d").getImageData(0,0,t.image.width,t.image.height); }
+    catch(e){ return null; }
+    const levels=[{w:t.image.width,h:t.image.height,d:d.data}];
+    let cur=levels[0];
+    while(cur.w>=64&&cur.h>=64&&(cur.w&1)===0&&(cur.h&1)===0){
+      const w2=cur.w>>1,h2=cur.h>>1,d2=new Uint8ClampedArray(w2*h2*4);
+      for(let y=0;y<h2;y++) for(let x=0;x<w2;x++){
+        const a=((2*y)*cur.w+2*x)*4, b=a+4, c=(((2*y+1)*cur.w)+2*x)*4, e=c+4, o=(y*w2+x)*4;
+        for(let k=0;k<4;k++) d2[o+k]=(cur.d[a+k]+cur.d[b+k]+cur.d[c+k]+cur.d[e+k]+2)>>2;
+      }
+      cur={w:w2,h:h2,d:d2}; levels.push(cur);
+    }
+    t.__ver=t.version;
+    t.__px={w:levels[0].w,h:levels[0].h,d:levels[0].d,levels:levels,texels:levels[0].w*levels[0].h,mean:-1};
+    return t.__px;
+  }
+  function pickLevel(T,texels,area){            // area — площадь треугольника в точках экрана
+    if(!T.levels||area<=0) return T;
+    const ratio=texels/area;                    // текселей на точку экрана
+    if(ratio<=1) return T.levels[0];
+    /* Полуровня в сторону резкости: строго по теореме брать нельзя — зерно
+       уходит в кашу; полшага ещё не рябит, но кожа остаётся кожей. */
+    let lvl=Math.max(0,Math.log(ratio)/Math.LN2*.5-.5)|0;
+    if(lvl>=T.levels.length) lvl=T.levels.length-1;
+    return T.levels[lvl];
+  }
+
+  /* ---- сбор треугольников мира ---- */
+  const A=new THREE.Vector3(),B=new THREE.Vector3(),C=new THREE.Vector3(),
+        NA=new THREE.Vector3(),NB=new THREE.Vector3(),NC=new THREE.Vector3(),
+        E1=new THREE.Vector3(),E2=new THREE.Vector3(),NR=new THREE.Vector3(),
+        NM=new THREE.Matrix3();
+  function push(out,g,mat,material){
+    const p=g.attributes.position, uvA=g.attributes.uv, nA=g.attributes.normal, idx=g.index;
+    const n=idx?idx.count:p.count;
+    const tex=texPix(material.map);
+    const bump=texPix(material.normalMap);
+    const rough=texPix(material.roughnessMap);
+    const bumpK=material.normalScale?material.normalScale.x:1;
+    const blend=!!(material.transparent&&material.map);
+    const c=material.color?material.color:{r:.6,g:.6,b:.6};
+    NM.getNormalMatrix(mat);
+    for(let f=0;f<n;f+=3){
+      const ia=idx?idx.getX(f):f, ib=idx?idx.getX(f+1):f+1, ic=idx?idx.getX(f+2):f+2;
+      A.fromBufferAttribute(p,ia).applyMatrix4(mat);
+      B.fromBufferAttribute(p,ib).applyMatrix4(mat);
+      C.fromBufferAttribute(p,ic).applyMatrix4(mat);
+      E1.subVectors(B,A); E2.subVectors(C,A); NR.crossVectors(E1,E2);
+      const L=NR.length(); if(L<1e-9) continue;
+      // цвет материала — sRGB; свет считается в линейном, как в WebGL
+      /* Форма объекта одна на все треугольники: если у части полей нет,
+         доступ к ним становится мегаморфным и рендер замедляется на порядок.
+         Поэтому поля объявляются всегда, пусть и нулями. */
+      const t={ax:A.x,ay:A.y,az:A.z, bx:B.x,by:B.y,bz:B.z, cx:C.x,cy:C.y,cz:C.z,
+                nx:NR.x/L, ny:NR.y/L, nz:NR.z/L,
+                r:Math.pow(c.r,2.2), g:Math.pow(c.g,2.2), b:Math.pow(c.b,2.2),
+                tex:tex, blend:blend, smooth:false, bump:null, bumpK:1, rough:rough,
+                nax:0,nay:0,naz:0, nbx:0,nby:0,nbz:0, ncx:0,ncy:0,ncz:0,
+                ua:0,va:0, ub:0,vb:0, uc:0,vc:0, uvArea:0,
+                tx:0,ty:0,tz:0, btx:0,bty:0,btz:0};
+      if(nA){                                   // нормали вершин — для плавного затенения
+        NA.fromBufferAttribute(nA,ia).applyMatrix3(NM).normalize();
+        NB.fromBufferAttribute(nA,ib).applyMatrix3(NM).normalize();
+        NC.fromBufferAttribute(nA,ic).applyMatrix3(NM).normalize();
+        t.smooth=true;
+        t.nax=NA.x; t.nay=NA.y; t.naz=NA.z;
+        t.nbx=NB.x; t.nby=NB.y; t.nbz=NB.z;
+        t.ncx=NC.x; t.ncy=NC.y; t.ncz=NC.z;
+      }
+      if((tex||bump)&&uvA){
+        t.uvArea=0;
+        t.ua=uvA.getX(ia); t.va=uvA.getY(ia);
+        t.ub=uvA.getX(ib); t.vb=uvA.getY(ib);
+        t.uc=uvA.getX(ic); t.vc=uvA.getY(ic);
+        t.uvArea=Math.abs((t.ub-t.ua)*(t.vc-t.va)-(t.uc-t.ua)*(t.vb-t.va))/2;
+        if(bump){
+          /* Касательная к треугольнику из его же UV: по ней карта нормалей
+             ложится на кожу в том же масштабе, в каком считалась развёртка.
+             У вытянутых треугольников определитель близок к нулю и деление
+             на него даёт случайное направление — отсюда радиальные полосы
+             по всей крышке. В таком случае берём мировой X, спроецированный
+             на плоскость грани: для плоской развёртки это и есть ответ. */
+          const du1=t.ub-t.ua, dv1=t.vb-t.va, du2=t.uc-t.ua, dv2=t.vc-t.va;
+          const det=du1*dv2-du2*dv1;
+          const uvScale=Math.max(Math.abs(du1),Math.abs(dv1),Math.abs(du2),Math.abs(dv2));
+          t.bump=bump; t.bumpK=bumpK*BUMP_SOFT;
+          let ok=false;
+          if(Math.abs(det)>1e-4*uvScale*uvScale){
+            const r=1/det;
+            const tx=(E1.x*dv2-E2.x*dv1)*r, ty=(E1.y*dv2-E2.y*dv1)*r, tz=(E1.z*dv2-E2.z*dv1)*r;
+            const tl=Math.hypot(tx,ty,tz);
+            if(tl>1e-6){ t.tx=tx/tl; t.ty=ty/tl; t.tz=tz/tl; ok=true; }
+          }
+          if(!ok){
+            const d=t.nx;                       // X минус его проекция на нормаль
+            let tx=1-t.nx*d, ty=-t.ny*d, tz=-t.nz*d;
+            const tl=Math.hypot(tx,ty,tz);
+            if(tl<1e-6){ tx=0; ty=1; tz=0; }
+            else { tx/=tl; ty/=tl; tz/=tl; }
+            t.tx=tx; t.ty=ty; t.tz=tz;
+          }
+          t.btx=t.ny*t.tz-t.nz*t.ty; t.bty=t.nz*t.tx-t.nx*t.tz; t.btz=t.nx*t.ty-t.ny*t.tx;
+        }
+      }
+      out.push(t);
+    }
+  }
+  /* want=0 — всё, кроме подвижного; want=1 — только подвижное (оттиск).
+     Статика собирается один раз на dirty, оттиск — каждый кадр. */
+  function walk(o,out,want){
+    if(o.visible===false) return;
+    const isDyn=(o.userData&&o.userData.dyn)?1:0;
+    if(isDyn!==want){ for(let i=0;i<o.children.length;i++) walk(o.children[i],out,want); return; }
+    if(o.isInstancedMesh){
+      const mm=new THREE.Matrix4(), wm=new THREE.Matrix4();
+      for(let i=0;i<o.count;i++){
+        o.getMatrixAt(i,mm);
+        push(out,o.geometry,wm.multiplyMatrices(o.matrixWorld,mm),o.material);
+      }
+    } else if(o.isMesh && o.geometry.attributes.position){
+      push(out,o.geometry,o.matrixWorld,o.material);
+    }
+    for(let i=0;i<o.children.length;i++) walk(o.children[i],out,want);
+  }
+  function collect(scene){
+    scene.updateMatrixWorld(true);
+    tris=[]; walk(scene,tris,0);
+  }
+
+  const VP=new THREE.Matrix4(), V4=new THREE.Vector4();
+  const sx=new Float64Array(3),sy=new Float64Array(3),sz=new Float64Array(3),sw=new Float64Array(3);
+
+  function render(scene,camera){
+    if(!tris) collect(scene);
+    scene.updateMatrixWorld(true);
+    dyn=[]; walk(scene,dyn,1);               // оттиск: 342 треугольника, дёшево
+    camera.updateMatrixWorld(true);
+    VP.multiplyMatrices(camera.projectionMatrix,camera.matrixWorldInverse);
+    const ex=camera.position.x, ey=camera.position.y, ez=camera.position.z;
+
+    const RW=W*ss, RH=H*ss;
+    for(let i=0;i<zbf.length;i++) zbf[i]=1e9;
+    // фон не рисуем вовсе: канва прозрачная, сквозь неё видно подложку
+    // сцены из CSS — тот же градиент, что и под WebGL
+    col.fill(0);
+
+    for(let pass=0;pass<2;pass++){          // сперва непрозрачное, потом оттиск
+    const arr=pass?dyn:tris;
+    for(let ti=0;ti<arr.length;ti++){
+      const t=arr[ti];
+      // отсечение обратных граней по нормали относительно глаза
+      const cx=(t.ax+t.bx+t.cx)/3, cy=(t.ay+t.by+t.cy)/3, cz=(t.az+t.bz+t.cz)/3;
+      let vx=cx-ex, vy=cy-ey, vz=cz-ez;
+      const vl=Math.sqrt(vx*vx+vy*vy+vz*vz); vx/=vl; vy/=vl; vz/=vl;
+      const facing=t.nx*vx+t.ny*vy+t.nz*vz;
+      if(facing>0 && !t.blend) continue;
+
+      let bad=false;
+      for(let v=0;v<3;v++){
+        const px=v===0?t.ax:(v===1?t.bx:t.cx),
+              py=v===0?t.ay:(v===1?t.by:t.cy),
+              pz=v===0?t.az:(v===1?t.bz:t.cz);
+        V4.set(px,py,pz,1).applyMatrix4(VP);
+        if(V4.w<=1e-6){ bad=true; break; }
+        const iw=1/V4.w;
+        sx[v]=(V4.x*iw*.5+.5)*RW; sy[v]=(1-(V4.y*iw*.5+.5))*RH;
+        sz[v]=V4.z*iw; sw[v]=iw;
+      }
+      if(bad) continue;
+
+      let miny=Math.max(0,Math.floor(Math.min(sy[0],sy[1],sy[2]))),
+          maxy=Math.min(RH-1,Math.ceil(Math.max(sy[0],sy[1],sy[2])));
+      if(miny>maxy) continue;
+      const det=(sy[1]-sy[2])*(sx[0]-sx[2])+(sx[2]-sx[1])*(sy[0]-sy[2]);
+      if(Math.abs(det)<1e-9) continue;
+      // производные барицентрических координат по x: внутри строки идём приращением
+      const dw0=(sy[1]-sy[2])/det, dw1=(sy[2]-sy[0])/det;
+
+      const flip=(facing>0)?-1:1;
+      const fnx=t.nx*flip, fny=t.ny*flip, fnz=t.nz*flip;
+      const smooth=fine && t.smooth;
+      const area=Math.abs(det)/2;
+      const tex=t.tex?pickLevel(t.tex,t.tex.texels*t.uvArea,area):null;
+      const bump=(fine&&t.bump)?pickLevel(t.bump,t.bump.texels*t.uvArea,area):null;
+      const rough=(fine&&t.rough)?pickLevel(t.rough,t.rough.texels*t.uvArea,area):null;
+
+      // плоское затенение считается один раз на треугольник
+      let flat=0, flatSpec=0;
+      const hx0=LIGHTS[0].x-vx, hy0=LIGHTS[0].y-vy, hz0=LIGHTS[0].z-vz;
+      const hl0=Math.sqrt(hx0*hx0+hy0*hy0+hz0*hz0)||1;
+      const hnx=hx0/hl0, hny=hy0/hl0, hnz=hz0/hl0;
+      if(!smooth&&!bump){
+        flat=AMB;
+        for(let li=0;li<LIGHTS.length;li++){
+          const L=LIGHTS[li], d=fnx*L.x+fny*L.y+fnz*L.z;
+          if(d>0) flat+=d*L.i;
+        }
+        const sp=Math.max(0,fnx*hnx+fny*hny+fnz*hnz);
+        const s2=sp*sp, s4=s2*s2, s8=s4*s4;    // sp^24 без Math.pow
+        flatSpec=s8*s8*s8*.20;
+      }
+      /* Пока крутят, свет считается той же формулой, что в чистовом
+         проходе, только по вершинам, а не по точкам. Плоское затенение
+         выше — без заворота света и без широкого блика: вещь темнела
+         на треть и меняла фактуру, стоило её тронуть. */
+      const gour=!smooth && !bump && t.smooth;
+      if(gour){
+        const gloss=1-(t.rough?roughMean(t.rough):.92);
+        vertLight(t.nax*flip,t.nay*flip,t.naz*flip,vx,vy,vz,hnx,hny,hnz,gloss,0);
+        vertLight(t.nbx*flip,t.nby*flip,t.nbz*flip,vx,vy,vz,hnx,hny,hnz,gloss,1);
+        vertLight(t.ncx*flip,t.ncy*flip,t.ncz*flip,vx,vy,vz,hnx,hny,hnz,gloss,2);
+      }
+
+      for(let y=miny;y<=maxy;y++){
+        const py=y+.5;
+        /* Отрезок строки берём пересечением с рёбрами, а не прямоугольником
+           вокруг треугольника: у длинных косых граней прямоугольник больше
+           самой грани в разы, и почти всё время уходило на выброшенные точки. */
+        let lo=1e9, hi=-1e9;
+        for(let e=0;e<3;e++){
+          const j=(e+1)%3;
+          const y0=sy[e], y1=sy[j];
+          if((y0<=py)===(y1<=py)) continue;
+          const x=sx[e]+(py-y0)*(sx[j]-sx[e])/(y1-y0);
+          if(x<lo) lo=x;
+          if(x>hi) hi=x;
+        }
+        if(hi<lo) continue;
+        let minx=Math.max(0,Math.ceil(lo-.5)), maxx=Math.min(RW-1,Math.floor(hi-.5));
+        if(minx>maxx) continue;
+        let w0=((sy[1]-sy[2])*(minx+.5-sx[2])+(sx[2]-sx[1])*(py-sy[2]))/det;
+        let w1=((sy[2]-sy[0])*(minx+.5-sx[2])+(sx[0]-sx[2])*(py-sy[2]))/det;
+        for(let x=minx;x<=maxx;x++,w0+=dw0,w1+=dw1){
+          const w2=1-w0-w1;
+          if(w0<-1e-6||w1<-1e-6||w2<-1e-6) continue;
+          const z=w0*sz[0]+w1*sz[1]+w2*sz[2];
+          const k=y*RW+x;
+          if(z>=zbf[k]) continue;
+
+          const iw=w0*sw[0]+w1*sw[1]+w2*sw[2];
+          let nx=fnx, ny=fny, nz=fnz;
+          if(smooth){
+            nx=(w0*t.nax*sw[0]+w1*t.nbx*sw[1]+w2*t.ncx*sw[2])/iw*flip;
+            ny=(w0*t.nay*sw[0]+w1*t.nby*sw[1]+w2*t.ncy*sw[2])/iw*flip;
+            nz=(w0*t.naz*sw[0]+w1*t.nbz*sw[1]+w2*t.ncz*sw[2])/iw*flip;
+          }
+
+          let rr=t.r, gg=t.g, bb=t.b, alpha=1, u=0,v=0;
+          if(tex||bump){
+            u=(w0*t.ua*sw[0]+w1*t.ub*sw[1]+w2*t.uc*sw[2])/iw;
+            v=(w0*t.va*sw[0]+w1*t.vb*sw[1]+w2*t.vc*sw[2])/iw;
+          }
+          if(tex){
+            if(t.blend){
+              const o=nearest(tex,u,v);
+              alpha=tex.d[o+3]/255;
+              if(alpha<0.02) continue;
+              rr=DEC[tex.d[o]]; gg=DEC[tex.d[o+1]]; bb=DEC[tex.d[o+2]];
+            }else{
+              const g2=(fine?bilinear(tex,u,v):tex.d[nearest(tex,u,v)]/255)*1.42;
+              rr*=g2; gg*=g2; bb*=g2;          // зерно кожи как множитель
+            }
+          }
+          if(bump){                            // рельеф зерна из карты нормалей
+            bilinear3(bump,u,v,BMP);
+            const bxs=(BMP[0]/127.5-1)*t.bumpK, bys=(BMP[1]/127.5-1)*t.bumpK,
+                  bzs=BMP[2]/127.5-1;
+            let mx=t.tx*bxs+t.btx*bys+nx*bzs,
+                my=t.ty*bxs+t.bty*bys+ny*bzs,
+                mz=t.tz*bxs+t.btz*bys+nz*bzs;
+            const ml=Math.sqrt(mx*mx+my*my+mz*mz);
+            if(ml>1e-6){ nx=mx/ml; ny=my/ml; nz=mz/ml; }
+          }
+
+          let lit,spec;
+          if(smooth||bump){
+            const nl=Math.sqrt(nx*nx+ny*ny+nz*nz)||1;
+            const ux=nx/nl, uy=ny/nl, uz=nz/nl;
+            /* Кожа заходит в тень мягко: свет немного заворачивается за
+               кромку. Резкая граница «свет-тень» — признак пластика. */
+            lit=AMB;
+            for(let li=0;li<LIGHTS.length;li++){
+              const L=LIGHTS[li], d=(ux*L.x+uy*L.y+uz*L.z+WRAP)/(1+WRAP);
+              if(d>0) lit+=d*L.i;
+            }
+            const sp=Math.max(0,ux*hnx+uy*hny+uz*hnz);
+            const s2=sp*sp, s4=s2*s2, s8=s4*s4;
+            /* Два блика: широкий матовый и узкий. Их доля берётся из карты
+               шероховатости — в бороздах кожа глуше, на плато глаже, отсюда
+               неровный отблеск, которого у пластика не бывает. */
+            const rgh=rough?bilinear(rough,u,v):.92;
+            const gloss=1-rgh;
+            spec=(s4*.9+s8*s8*2.6)*gloss*gloss*.55;
+            /* На просвет по касательной кожа заметно светлеет */
+            const vn=Math.max(0,-(ux*vx+uy*vy+uz*vz));
+            const fres=Math.pow(1-vn,5);
+            spec+=fres*.10*(0.35+gloss);
+          } else if(gour){
+            lit =(w0*VL[0]*sw[0]+w1*VL[1]*sw[1]+w2*VL[2]*sw[2])/iw;
+            spec=(w0*VS[0]*sw[0]+w1*VS[1]*sw[1]+w2*VS[2]*sw[2])/iw;
+          } else { lit=flat; spec=flatSpec; }
+
+          if(!t.blend) zbf[k]=z;
+          const o2=k*4;
+          // мягкое поджатие светов вместо жёсткого обрезания: тёмная кожа
+          // иначе выцветает в зеркальной засветке
+          let R=rr*lit+spec, G=gg*lit+spec, Bc=bb*lit+spec;
+          R=R/(1+R*.42); G=G/(1+G*.42); Bc=Bc/(1+Bc*.42);
+          if(alpha>=1){
+            col[o2]=enc(R)|0; col[o2+1]=enc(G)|0; col[o2+2]=enc(Bc)|0; col[o2+3]=255;
+          }else{
+            /* Прозрачное кладётся на то, что уже в кадре. Раньше оно
+               смешивалось с собственным цветом материала — у оттиска
+               и тени это белый, отсюда и светлое пятно. */
+            const ia=1-alpha;
+            col[o2]  =enc(R)*alpha+col[o2]*ia;
+            col[o2+1]=enc(G)*alpha+col[o2+1]*ia;
+            col[o2+2]=enc(Bc)*alpha+col[o2+2]*ia;
+            col[o2+3]=255*alpha+col[o2+3]*ia;
+          }
+        }
+      }
+    }
+    }
+    resolve();
+    shadow();
+    ctx.putImageData(idata,0,0);
+  }
+
+  /* Тень на подложке. Канва прозрачная, фон — CSS, поэтому тень пишется
+     в пустые точки кадра: чёрный с прозрачностью. Считается в мелкой сетке
+     (силуэт → размытие → обратно), а не в полном буфере — размытие во весь
+     кадр стоило бы дороже самого чехла. Слоёв два, как на предметной
+     съёмке: широкая мягкая от ключевого света сверху слева и плотная узкая
+     у самого края — без неё вещь висит в воздухе.
+     Кладётся уже в итоговый кадр, после усреднения: в увеличенном буфере
+     точек вчетверо больше, и тень стоила 40% кадра. Под полупрозрачный
+     край силуэта она подкладывается снизу, а не затирает его. */
+  let shKey=-1,shW=0,shH=0,shM=null,shS=null,shC=null,shT=null,
+      shX0=null,shX1=null,shAX=null;
+  function blur(a,w,h,r){                       // три прохода коробкой ≈ гаусс
+    if(r<1) return;
+    const k=1/(2*r+1);
+    for(let it=0;it<3;it++){
+      for(let y=0;y<h;y++){
+        const o=y*w; let s=0;
+        for(let x=0;x<=r&&x<w;x++) s+=a[o+x];
+        for(let x=0;x<w;x++){
+          shT[o+x]=s*k;
+          if(x-r>=0) s-=a[o+x-r];
+          if(x+r+1<w) s+=a[o+x+r+1];
+        }
+      }
+      for(let x=0;x<w;x++){
+        let s=0;
+        for(let y=0;y<=r&&y<h;y++) s+=shT[y*w+x];
+        for(let y=0;y<h;y++){
+          a[y*w+x]=s*k;
+          if(y-r>=0) s-=shT[(y-r)*w+x];
+          if(y+r+1<h) s+=shT[(y+r+1)*w+x];
+        }
+      }
+    }
+  }
+  function shadow(){
+    const d=idata.data;
+    const f=Math.max(2,Math.round(W/320)), w=Math.ceil(W/f), h=Math.ceil(H/f);
+    if(W*65536+H!==shKey){
+      shKey=W*65536+H; shW=w; shH=h;
+      shM=new Float32Array(w*h); shS=new Float32Array(w*h);
+      shC=new Float32Array(w*h); shT=new Float32Array(w*h);
+      // столбцы сетки и вес между ними — один раз на размер кадра
+      shX0=new Int32Array(W); shX1=new Int32Array(W); shAX=new Float32Array(W);
+      for(let x=0;x<W;x++){
+        const fx=(x+.5)/f-.5, x0=Math.floor(fx);
+        shX0[x]=x0<0?0:x0; shX1[x]=x0+1<w?x0+1:w-1; shAX[x]=fx-x0;
+      }
+    }
+    shM.fill(0);
+    const cell=1/(255*f*f);
+    for(let y=0;y<H;y++){
+      const row=((y/f)|0)*w;
+      for(let x=0,o=y*W*4+3;x<W;x++,o+=4) if(d[o]) shM[row+((x/f)|0)]+=d[o]*cell;
+    }
+    shS.set(shM); shC.set(shM);
+    // размеры — доли высоты кадра, чтобы тень не менялась с плотностью экрана
+    const u=H/f;
+    blur(shS,w,h,Math.round(u*.030));
+    blur(shC,w,h,Math.round(u*.006));
+    const wx=Math.round(u*.022), wy=Math.round(u*.040), cy=Math.round(u*.006);
+    for(let y=0;y<h;y++) for(let x=0;x<w;x++){
+      const sx2=x-wx, sy2=y-wy, cy2=y-cy;
+      const a=(sx2>=0&&sy2>=0)?shS[sy2*w+sx2]:0;
+      const c=(cy2>=0)?shC[cy2*w+x]:0;
+      shM[y*w+x]=Math.min(.85,a*.62+c*.40);
+    }
+    for(let y=0;y<H;y++){
+      const fy=(y+.5)/f-.5, y0=Math.floor(fy), ay=fy-y0;
+      const ra=Math.max(0,y0)*w, rb=Math.min(h-1,y0+1)*w;
+      for(let x=0,o=y*W*4+3;x<W;x++,o+=4){
+        const a=d[o];
+        if(a===255) continue;
+        const xa=shX0[x], xb=shX1[x], ax=shAX[x];
+        const v=(shM[ra+xa]+(shM[ra+xb]-shM[ra+xa])*ax)*(1-ay)+
+                (shM[rb+xa]+(shM[rb+xb]-shM[rb+xa])*ax)*ay;
+        if(v<=.004) continue;
+        if(a===0){ d[o]=v*255; continue; }
+        // край силуэта: вещь поверх тени, цвет разбавляется только прозрачностью
+        const ao=a/255, A=ao+v*(1-ao), k=ao/A;
+        d[o-3]*=k; d[o-2]*=k; d[o-1]*=k; d[o]=A*255;
+      }
+    }
+  }
+
+  function nearest(T,u,v){
+    let tx=Math.floor((u-Math.floor(u))*T.w), ty=Math.floor((1-(v-Math.floor(v)))*T.h);
+    if(tx<0)tx=0; if(tx>=T.w)tx=T.w-1;
+    if(ty<0)ty=0; if(ty>=T.h)ty=T.h-1;
+    return (ty*T.w+tx)*4;
+  }
+  /* Свет в вершине для быстрого прохода. Формула — ровно та, что в
+     чистовом проходе на точку (render, ветка smooth||bump): правишь
+     одну — правь и другую, иначе вещь снова будет меняться при вращении. */
+  const VL=new Float64Array(3), VS=new Float64Array(3);
+  function vertLight(nx,ny,nz,vx,vy,vz,hnx,hny,hnz,gloss,i){
+    const nl=Math.sqrt(nx*nx+ny*ny+nz*nz)||1, ux=nx/nl, uy=ny/nl, uz=nz/nl;
+    let lit=AMB;
+    for(let li=0;li<LIGHTS.length;li++){
+      const L=LIGHTS[li], d=(ux*L.x+uy*L.y+uz*L.z+WRAP)/(1+WRAP);
+      if(d>0) lit+=d*L.i;
+    }
+    const sp=Math.max(0,ux*hnx+uy*hny+uz*hnz);
+    const s2=sp*sp, s4=s2*s2, s8=s4*s4;
+    let spec=(s4*.9+s8*s8*2.6)*gloss*gloss*.55;
+    const p=1-Math.max(0,-(ux*vx+uy*vy+uz*vz)), p2=p*p;   // (1-vn)^5 без Math.pow
+    spec+=p*p2*p2*.10*(0.35+gloss);
+    VL[i]=lit; VS[i]=spec;
+  }
+  /* средняя шероховатость карты — по самому мелкому уровню, один раз */
+  function roughMean(T){
+    if(T.mean>=0) return T.mean;
+    const L=T.levels[T.levels.length-1];
+    let s=0; for(let i=0;i<L.d.length;i+=4) s+=L.d[i];
+    return (T.mean=s/(L.d.length/4)/255);
+  }
+  const BMP=new Float32Array(3);
+  function bilinear3(T,u,v,out){              // три канала: карта нормалей
+    const fx=(u-Math.floor(u))*T.w-.5, fy=(1-(v-Math.floor(v)))*T.h-.5;
+    const x0=Math.floor(fx), y0=Math.floor(fy), ax=fx-x0, ay=fy-y0;
+    const w=T.w,h=T.h,d=T.d;
+    const xa=((x0%w)+w)%w, xb=((x0+1)%w+w)%w, ya=((y0%h)+h)%h, yb=((y0+1)%h+h)%h;
+    const i00=(ya*w+xa)*4, i10=(ya*w+xb)*4, i01=(yb*w+xa)*4, i11=(yb*w+xb)*4;
+    for(let c=0;c<3;c++)
+      out[c]=((d[i00+c]*(1-ax)+d[i10+c]*ax)*(1-ay)+(d[i01+c]*(1-ax)+d[i11+c]*ax)*ay);
+  }
+  function bilinear(T,u,v){                   // только серый канал: зерно кожи
+    const fx=(u-Math.floor(u))*T.w-.5, fy=(1-(v-Math.floor(v)))*T.h-.5;
+    const x0=Math.floor(fx), y0=Math.floor(fy), ax=fx-x0, ay=fy-y0;
+    const w=T.w,h=T.h,d=T.d;
+    const xa=((x0%w)+w)%w, xb=((x0+1)%w+w)%w, ya=((y0%h)+h)%h, yb=((y0+1)%h+h)%h;
+    const p00=d[(ya*w+xa)*4], p10=d[(ya*w+xb)*4], p01=d[(yb*w+xa)*4], p11=d[(yb*w+xb)*4];
+    return ((p00*(1-ax)+p10*ax)*(1-ay)+(p01*(1-ax)+p11*ax)*ay)/255;
+  }
+
+  return {
+    domElement:cv, setSize:setSize, setQuality:setQuality,
+    render:render,
+    dirty:function(){ tris=null; rev++; },
+    touch:function(){ rev++; },            // поменялось только подвижное
+    rev:function(){ return rev; },
+    stats:function(){ return {w:W,h:H,ss:ss,fine:fine,tris:tris?tris.length:0}; }
+  };
+}
+
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(30,1,10,6000);
+
+/* студийное окружение: софтбокс сверху, градиент по стенам */
+const ENV=(function(){
+  const S=256,f=[];
+  for(let i=0;i<6;i++){
+    const c=document.createElement("canvas"); c.width=c.height=S;
+    const g=c.getContext("2d");
+    if(i===2){
+      g.fillStyle="#1A1A1A"; g.fillRect(0,0,S,S);
+      const r=g.createRadialGradient(S*.42,S*.46,0,S*.42,S*.46,S*.52);
+      r.addColorStop(0,"#D0D0D0"); r.addColorStop(.62,"#BEBEBE");
+      r.addColorStop(.84,"#4C4C4C"); r.addColorStop(1,"#1A1A1A");
+      g.fillStyle=r; g.fillRect(0,0,S,S);
+    } else if(i===3){ g.fillStyle="#090909"; g.fillRect(0,0,S,S); }
+    else {
+      const gr=g.createLinearGradient(0,0,0,S);
+      gr.addColorStop(0,"#B0B0B0"); gr.addColorStop(.30,"#5E5E5E");
+      gr.addColorStop(.62,"#242424"); gr.addColorStop(1,"#070707");
+      g.fillStyle=gr; g.fillRect(0,0,S,S);
+    }
+    f.push(c);
+  }
+  const t=new THREE.CubeTexture(f); t.needsUpdate=true; t.encoding=THREE.sRGBEncoding;
+  return t;
+})();
+
+scene.add(new THREE.HemisphereLight(0xFFFFFF,0x101010,.30));
+const key=new THREE.DirectionalLight(0xFFFFFF,1.50);  key.position.set(-400,700,780);
+const key2=new THREE.DirectionalLight(0xFFFFFF,.42);  key2.position.set(-150,760,300);
+const fill=new THREE.DirectionalLight(0xFFFFFF,.22);  fill.position.set(680,150,420);
+const rim=new THREE.DirectionalLight(0xFFFFFF,.30);   rim.position.set(230,-430,-600);
+scene.add(key,key2,fill,rim);
+
+/* Плоскости-тени под чехлом больше нет. Она была задумана под аппаратный
+   рендер, а чехол ни на чём не стоит: снизу выходило светлое пятно. */
+
+/* ====================================================== контур в плане
+   Силуэт снят с образца: длина к ширине 1,75; самое широкое место на 28%
+   длины от макушки; на 65% длины ширина ровно вдвое меньше; торец ручки
+   22% от максимума и скруглён. Параллельного участка у ручки нет.
+   Голова — четверть суперэллипса, низ — монотонный сплайн, торец — дуга. */
+const S_MAX=0.28, HEAD_N=2.20, W_END=0.22;
+const ANCH_S=[0.28,0.36,0.45,0.55,0.65,0.75,0.85,0.92];
+const ANCH_W=[1.000,0.965,0.860,0.685,0.500,0.355,0.280,0.245];
+
+/* монотонная кубическая интерполяция: без выбросов между анкерами */
+function pchip(xs,ys){
+  const n=xs.length,h=[],d=[];
+  for(let i=0;i<n-1;i++){ h.push(xs[i+1]-xs[i]); d.push((ys[i+1]-ys[i])/h[i]); }
+  const m=new Array(n); m[0]=0; m[n-1]=0;
+  for(let i=1;i<n-1;i++){
+    if(d[i-1]*d[i]<=0) m[i]=0;
+    else{ const w1=2*h[i]+h[i-1], w2=h[i]+2*h[i-1];
+          m[i]=(w1+w2)/(w1/d[i-1]+w2/d[i]); }
+  }
+  return function(x){
+    let i=0; while(i<n-2&&x>xs[i+1]) i++;
+    const t=(x-xs[i])/h[i], t2=t*t, t3=t2*t;
+    return (2*t3-3*t2+1)*ys[i]+(t3-2*t2+t)*h[i]*m[i]
+         +(-2*t3+3*t2)*ys[i+1]+(t3-t2)*h[i]*m[i+1];
+  };
+}
+const R_END=W_END*(MM.w/2)/MM.l, S_END=1-R_END;
+const LOWER=pchip(ANCH_S.concat([S_END]),ANCH_W.concat([W_END]));
+
+/* доля от максимальной полуширины по доле длины s от макушки */
+function halfW(s){
+  if(s<=0||s>=1) return 0;
+  if(s<S_MAX){
+    const u=(S_MAX-s)/S_MAX;
+    return Math.pow(Math.max(0,1-Math.pow(u,HEAD_N)),1/HEAD_N);
+  }
+  if(s<=S_END) return LOWER(s);
+  const u=(s-S_END)/R_END;
+  return W_END*Math.sqrt(Math.max(0,1-u*u));
+}
+
+function planOf(N){
+  const D=1600, HW=MM.w/2, raw=[];
+  for(let i=0;i<=D;i++){ const s=i/D; raw.push([halfW(s)*HW, MM.l*(.5-s)]); }
+  for(let i=D-1;i>0;i--) raw.push([-raw[i][0],raw[i][1]]);
+  const M=raw.length, cum=[0];
+  for(let i=1;i<=M;i++){
+    const a=raw[i-1], b=raw[i%M];
+    cum.push(cum[i-1]+Math.hypot(b[0]-a[0],b[1]-a[1]));
+  }
+  const per=cum[M], pts=[];
+  let k=0;
+  for(let i=0;i<N;i++){                       // равномерно по длине дуги
+    const t=per*i/N;
+    while(k<M-1&&cum[k+1]<t) k++;
+    const seg=cum[k+1]-cum[k], f=seg>1e-9?(t-cum[k])/seg:0;
+    const a=raw[k], b=raw[(k+1)%M];
+    pts.push(new THREE.Vector2(a[0]+(b[0]-a[0])*f, a[1]+(b[1]-a[1])*f));
+  }
+  let area=0;
+  for(let i=0;i<N;i++){ const a=pts[i],b=pts[(i+1)%N]; area+=a.x*b.y-b.x*a.y; }
+  if(area<0) pts.reverse();
+  const nrm=[];
+  for(let i=0;i<N;i++){
+    const a=pts[(i-1+N)%N], b=pts[(i+1)%N];
+    const t=new THREE.Vector2(b.x-a.x,b.y-a.y).normalize();
+    nrm.push(new THREE.Vector2(-t.y,t.x));           // внутрь
+  }
+  return {pts:pts, nrm:nrm, N:N};
+}
+
+/* сечение: суперэллипс. Показатель больше двойки — серёдка плоская,
+   стенка у шва крутая: так лежит мягкий чехол, а не жёсткая скорлупа. */
+function profileAt(th){
+  const c=Math.abs(Math.cos(th)), s=Math.abs(Math.sin(th)), e=2/SOFT_M;
+  return {ins:R_EDGE*(1-Math.pow(c,e)), z:H*Math.pow(s,e)};
+}
+/* мягкая неровность: гладкое поле около ±0.7 мм, гаснет к шву */
+function puff(x,y,u){
+  const w=Math.sin(x*.0169+1.7)*Math.sin(y*.0121-0.6)
+         +Math.sin(x*.0270-2.2)*Math.sin(y*.0207+1.1)*.62
+         +Math.sin((x+y)*.0093+0.4)*.5;
+  return PUFF*u*w*.48;
+}
+
+/* ============================== лофт корпуса с честной UV-развёрткой */
+function buildShell(N,M,withUV){
+  const pl=planOf(N), pts=pl.pts, nrm=pl.nrm;
+  const cum=[0];
+  for(let i=1;i<=N;i++) cum.push(cum[i-1]+pts[i%N].distanceTo(pts[i-1]));
+  const perim=cum[N];
+  const tilesU=Math.max(1,Math.round(perim/tileMM));
+  const tile=perim/tilesU;
+
+  const prof=[], vAcc=[0];
+  for(let j=-M;j<=M;j++){
+    const th=(j/M)*(Math.PI/2), p=profileAt(th);
+    prof.push({ins:p.ins, z:(j<0?-1:1)*p.z});
+  }
+  for(let j=1;j<prof.length;j++)
+    vAcc.push(vAcc[j-1]+Math.hypot(prof[j].ins-prof[j-1].ins, prof[j].z-prof[j-1].z));
+  const vMid=vAcc[M];
+
+  /* U считается по длине дуги того ряда, где лежит вершина, и нормируется
+     на целое число плиток: масштаб зерна честный на каждом ряду, а шва нет,
+     потому что крайний столбец приходит ровно в tilesU. */
+  const P=[],UV=[],ID=[],W=N+1;
+  for(let j=0;j<prof.length;j++){
+    const rx=[],ry=[],rc=[0];
+    for(let i=0;i<=N;i++){
+      const k=i%N;
+      rx.push(pts[k].x+nrm[k].x*prof[j].ins);
+      ry.push(pts[k].y+nrm[k].y*prof[j].ins);
+    }
+    for(let i=1;i<=N;i++) rc.push(rc[i-1]+Math.hypot(rx[i]-rx[i-1],ry[i]-ry[i-1]));
+    for(let i=0;i<=N;i++){
+      const u=Math.abs(prof[j].z)/H, dz=puff(rx[i],ry[i],u);
+      P.push(rx[i], ry[i], prof[j].z+(prof[j].z<0?-dz:dz));
+      if(withUV) UV.push(rc[i]/rc[N]*tilesU, (vAcc[j]-vMid)/tile);
+    }
+  }
+  for(let j=0;j<prof.length-1;j++) for(let i=0;i<N;i++){
+    const a=j*W+i,b=a+1,c=(j+1)*W+i,d=c+1;
+    ID.push(a,d,c, a,b,d);          // нормали наружу
+  }
+  const band=new THREE.BufferGeometry();
+  band.setAttribute("position",new THREE.Float32BufferAttribute(P,3));
+  if(withUV) band.setAttribute("uv",new THREE.Float32BufferAttribute(UV,2));
+  band.setIndex(ID); band.computeVertexNormals();
+
+  /* Крышки: контур, смещённый внутрь на R_EDGE, стянутый сеткой к оси X=0.
+     Стягивать в одну точку нельзя: получается веер игольчатых треугольников,
+     на котором и затенение, и рельеф идут радиальными полосами. Каждая точка
+     едет к своей проекции на ось, поэтому клетки остаются клетками. */
+  function cap(sign){
+    const K=LOD.cap, P2=[],UV2=[],ID2=[],NM2=[], ring=[];
+    for(let i=0;i<N;i++)
+      ring.push([pts[i].x+nrm[i].x*R_EDGE, pts[i].y+nrm[i].y*R_EDGE]);
+    for(let k=0;k<=K;k++){
+      const t=k/K;
+      for(let i=0;i<N;i++){
+        const x=ring[i][0]*(1-t), y=ring[i][1];
+        P2.push(x,y,(H+puff(x,y,1))*sign);
+        if(withUV) UV2.push(x/tile, y/tile);
+        /* Нормаль берём аналитически из той же поверхности, а не усреднением
+           граней: клетки у оси вытянуты, и усреднённые нормали дают на коже
+           радиальные полосы. Аналитическая от формы треугольников не зависит. */
+        const nn=project(x,y).n;
+        NM2.push(nn.x*sign, nn.y*sign, nn.z*sign);
+      }
+    }
+    for(let k=0;k<K;k++) for(let i=0;i<N;i++){
+      const a=k*N+i, b=k*N+(i+1)%N, c=(k+1)*N+i, d=(k+1)*N+(i+1)%N;
+      if(sign>0) ID2.push(a,b,d, a,d,c);
+      else       ID2.push(a,d,b, a,c,d);
+    }
+    const g=new THREE.BufferGeometry();
+    g.setAttribute("position",new THREE.Float32BufferAttribute(P2,3));
+    g.setAttribute("normal",new THREE.Float32BufferAttribute(NM2,3));
+    if(withUV) g.setAttribute("uv",new THREE.Float32BufferAttribute(UV2,2));
+    g.setIndex(ID2);
+    return g;
+  }
+
+  return {geos:[band,cap(1),cap(-1)], plan:pl, perim:perim, tile:tile};
+}
+
+/* ==================== аналитическая проекция точки плана на поверхность */
+const PICK=planOf(320);
+/* расстояние до контура: положительное внутри, отрицательное снаружи */
+function distIn(x,y){
+  let best=1e9;
+  const p=PICK.pts,N=PICK.N;
+  for(let i=0;i<N;i++){
+    const a=p[i], b=p[(i+1)%N];
+    const ex=b.x-a.x, ey=b.y-a.y, L2=ex*ex+ey*ey;
+    let t=L2>0?((x-a.x)*ex+(y-a.y)*ey)/L2:0;
+    t=t<0?0:(t>1?1:t);
+    const d=Math.hypot(x-(a.x+ex*t), y-(a.y+ey*t));
+    if(d<best) best=d;
+  }
+  let cross=0;                                   // луч вправо
+  for(let i=0;i<N;i++){
+    const a=p[i], b=p[(i+1)%N];
+    if((a.y>y)!==(b.y>y)){
+      const xx=a.x+(y-a.y)/(b.y-a.y)*(b.x-a.x);
+      if(xx>x) cross++;
+    }
+  }
+  return (cross%2)===1 ? best : -best;
+}
+/* высота верхней поверхности: то же сечение, что и в лофте, плюс неровность */
+function zAt(x,y){
+  const d=distIn(x,y);
+  if(d<=0) return 0;
+  const a=Math.min(d,R_EDGE)/R_EDGE;             // 0 у шва, 1 на плоскости
+  const c=Math.pow(Math.max(0,1-a),SOFT_M/2);    // это cos(th)
+  const s=Math.sqrt(Math.max(0,1-c*c));
+  const z=H*Math.pow(s,2/SOFT_M);
+  return z+puff(x,y,z/H);
+}
+/* нормаль берётся из градиента: неровность учитывается сама собой.
+   Сверено с рейкастом по настоящей сетке: z до 0.01 мм, нормаль до 0.2°. */
+function project(x,y){
+  const z=zAt(x,y), h=0.7;
+  const nx=-(zAt(x+h,y)-zAt(x-h,y))/(2*h);
+  const ny=-(zAt(x,y+h)-zAt(x,y-h))/(2*h);
+  const n=new THREE.Vector3(nx,ny,1).normalize();
+  return {z:z, n:n, inside:distIn(x,y)>0};
+}
+
+/* ================================================== выделка кожи
+   Три реальные выделки вместо одной. Все карты считаются под размер
+   плитки 55 мм, поэтому зерно выходит в натуральном масштабе.        */
+function rngFrom(seed){
+  let s=seed>>>0;
+  return function(){ s=(s*1103515245+12345)&0x7fffffff; return s/0x7fffffff; };
+}
+
+/* ячейки Вороного по тору: edge — сеть границ, dome — выпуклость чешуйки */
+function voronoi(S,G,jit,rnd){
+  const cs=S/G, sx=new Float32Array(G*G), sy=new Float32Array(G*G), sv=new Float32Array(G*G);
+  for(let y=0;y<G;y++) for(let x=0;x<G;x++){
+    const k=y*G+x;
+    sx[k]=(x+.5+(rnd()-.5)*jit)*cs;
+    sy[k]=(y+.5+(rnd()-.5)*jit)*cs;
+    sv[k]=rnd();
+  }
+  const edge=new Float32Array(S*S), dome=new Float32Array(S*S), cell=new Float32Array(S*S);
+  const half=S/2;
+  for(let py=0;py<S;py++){
+    const cy=Math.floor(py/cs);
+    for(let px=0;px<S;px++){
+      const cx=Math.floor(px/cs);
+      let f1=1e9,f2=1e9,id=0;
+      for(let oy=-1;oy<=1;oy++) for(let ox=-1;ox<=1;ox++){
+        const k=((cy+oy+G)%G)*G+((cx+ox+G)%G);
+        let dx=sx[k]-px, dy=sy[k]-py;
+        if(dx>half)dx-=S; else if(dx<-half)dx+=S;
+        if(dy>half)dy-=S; else if(dy<-half)dy+=S;
+        const d=Math.sqrt(dx*dx+dy*dy);
+        if(d<f1){ f2=f1; f1=d; id=k; } else if(d<f2){ f2=d; }
+      }
+      const i=py*S+px;
+      edge[i]=Math.min(1,(f2-f1)/(cs*.40));
+      const q=Math.min(1,f1/(cs*.62));
+      dome[i]=Math.sqrt(Math.max(0,1-q*q));
+      cell[i]=sv[id];
+    }
+  }
+  return {edge:edge, dome:dome, cell:cell};
+}
+
+/* Поры и морщины считаются в массиве, а не рисуются на канве.
+   Раньше здесь были filter:"blur(...)" и тысячи дуг — это идёт через
+   ту же графическую подсистему, что и WebGL, и на машине со сломанным
+   драйвером роняет вкладку целиком. Теперь чистая арифметика: штампы
+   с обёрткой по краям и разделимое размытие. */
+function detail(S,rnd,o){
+  const buf=new Float32Array(S*S).fill(.5);
+  const A=S*S;
+  const idx=function(x,y){                       // обёртка по обеим осям
+    const xx=((x%S)+S)%S, yy=((y%S)+S)%S;
+    return yy*S+xx;
+  };
+  const stamp=function(x,y,a,v){                 // подмешать значение v с весом a
+    const i=idx(Math.round(x),Math.round(y));
+    buf[i]+=(v-buf[i])*a;
+  };
+
+  // морщины: ломаные, идут поперёк и вдоль, часть светлее, часть темнее
+  for(let i=0;i<o.wrinkles;i++){
+    const dark=rnd()>.5, v=dark?.27:.84, wid=.5+rnd()*o.wwidth;
+    const a=o.walpha*(.6+rnd()*.8);
+    let x=rnd()*S, y=rnd()*S;
+    for(let k=0;k<9;k++){
+      const nx=x+(rnd()-.5)*o.wstep, ny=y+(rnd()-.5)*o.wstep;
+      const len=Math.hypot(nx-x,ny-y), steps=Math.max(1,Math.ceil(len));
+      for(let t=0;t<steps;t++){
+        const f=t/steps, px=x+(nx-x)*f, py=y+(ny-y)*f;
+        for(let w=-wid;w<=wid;w+=.7) stamp(px+w*.7,py-w*.7,a,v);
+      }
+      x=nx; y=ny;
+    }
+  }
+
+  // поры: круглые вмятины разного размера
+  for(let i=0;i<o.pores;i++){
+    const cx=rnd()*S, cy=rnd()*S, r=o.pmin+rnd()*o.pspan;
+    const a=o.palpha*(.45+rnd()*.55), r2=r*r;
+    for(let dy=-Math.ceil(r);dy<=Math.ceil(r);dy++)
+      for(let dx=-Math.ceil(r);dx<=Math.ceil(r);dx++){
+        const d2=dx*dx+dy*dy;
+        if(d2>r2) continue;
+        stamp(cx+dx,cy+dy,a*(1-d2/r2*.55),.18);
+      }
+  }
+
+  // разделимое размытие по кольцу: заменяет canvas-фильтр
+  const rad=Math.max(1,Math.round((o.wblur+o.pblur)/2));
+  const tmp=new Float32Array(A);
+  const pass=function(src,dst,horiz){
+    const n=rad*2+1;
+    for(let y=0;y<S;y++) for(let x=0;x<S;x++){
+      let sum=0;
+      for(let k=-rad;k<=rad;k++)
+        sum+=src[horiz?idx(x+k,y):idx(x,y+k)];
+      dst[y*S+x]=sum/n;
+    }
+  };
+  pass(buf,tmp,true); pass(tmp,buf,false);
+  return buf;
+}
+
+const CLAMP=function(v){ return v<0?0:(v>1?1:v); };
+
+/* --- гладкая полуанилиновая: мелкая пора и мягкие складки --- */
+function hideSmooth(S,rnd){
+  const cre=voronoi(S,6,.95,rnd);              // складки ~9 мм, только они и видны издали
+  const ce=voronoi(S,52,.92,rnd).edge;         // еле заметная сетка ~1 мм
+  const dt=detail(S,rnd,{wrinkles:420,wstep:80,wwidth:1.8,walpha:.075,wblur:1.8,
+                         pores:20000,pmin:.85,pspan:1.7,palpha:.13,pblur:.8});
+  const h=new Float32Array(S*S);
+  for(let i=0;i<h.length;i++)
+    h[i]=CLAMP(.60 + .12*(cre.dome[i]-.5) + .10*(1-cre.edge[i])
+               - .10*(1-ce[i]) + (cre.cell[i]-.5)*.07 + .13*(dt[i]-.5));
+  /* Шероховатость 0.44…0.56 — это и есть кожа: почти матовая, но
+     с широким мягким бликом. При 0.9, как было, поверхность не отвечает
+     на свет вовсе и выглядит крашеным пенопластом. */
+  return {h:h, ST:1.2, nscale:.45, aBase:.70, aSpan:.22, rBase:.56, rSpan:.12, aoDepth:.30};
+}
+
+/* --- флотар: крупная чешуйка, как на образце ---
+   Плитка — 55 мм, поэтому 18 ячеек в ряд дают чешуйку около 3 мм: такую
+   видно на общем плане. Мелкая сетка внутри и поры работают вблизи, а
+   крупные складки в 11 мм переживают любое уменьшение и читаются кожей
+   даже тогда, когда зерно уже сгладилось. Разница по цвету от ячейки к
+   ячейке важнее рельефа: при уменьшении рельеф усредняется в ноль, а
+   пятнистость остаётся. */
+function hidePebble(S,rnd){
+  const big=voronoi(S,25,.78,rnd);            // чешуйка ~2.2 мм
+  const sub=voronoi(S,52,.86,rnd);            // зерно внутри чешуйки ~1 мм
+  const cre=voronoi(S,5,.95,rnd);             // складки ~11 мм
+  const dt=detail(S,rnd,{wrinkles:260,wstep:72,wwidth:1.7,walpha:.07,wblur:1.6,
+                         pores:13000,pmin:.7,pspan:1.4,palpha:.12,pblur:.9});
+  const h=new Float32Array(S*S);
+  for(let i=0;i<h.length;i++){
+    /* Чешуйка не шарик: верх приплюснут, а между чешуйками — узкая
+       глубокая борозда. Круглые купола с разной яркостью дают не кожу,
+       а пенопласт, поэтому купол давится степенью, разброс по ячейкам
+       почти убран, а вся читаемость перенесена в борозды. */
+    const dome=Math.pow(big.dome[i],.45);
+    const groove=Math.pow(big.edge[i],1.8);   // 0 в борозде, 1 на плато
+    h[i]=CLAMP(.30 + .30*dome*groove + .22*groove
+               + (big.cell[i]-.5)*.05
+               + .06*sub.dome[i]*groove + .07*(1-cre.edge[i]) + .07*(dt[i]-.5));
+  }
+  /* Рельеф вдвое мельче прежнего: у настоящего флотара чешуйка обозначена,
+     а не вылеплена. Плюс живая шероховатость — блик собирается на плато
+     и гаснет в бороздах. */
+  return {h:h, ST:1.5, nscale:.62, aBase:.58, aSpan:.36, rBase:.60, rSpan:.16, aoDepth:.45};
+}
+
+/* --- сафьяно: тиснёная косая клетка --- */
+function hideSaffiano(S,rnd){
+  const K=32, p=S/K;                      // шаг делит сторону нацело — шва нет
+  const dt=detail(S,rnd,{wrinkles:120,wstep:50,wwidth:1.1,walpha:.05,wblur:1.4,
+                         pores:9000,pmin:.7,pspan:1.2,palpha:.10,pblur:.8});
+  const tri=function(t){ const f=t-Math.floor(t); return 1-Math.abs(f-.5)*2; };
+  const h=new Float32Array(S*S);
+  for(let y=0;y<S;y++) for(let x=0;x<S;x++){
+    const ra=Math.pow(tri((x+y)/p),1.35), rb=Math.pow(tri((x-y+S)/p),1.35);
+    h[y*S+x]=CLAMP(.26 + .46*Math.max(ra,rb) + .14*ra*rb + .06*(dt[y*S+x]-.5));
+  }
+  return {h:h, ST:1.7, nscale:.60, aBase:.62, aSpan:.30, rBase:.48, rSpan:.14, aoDepth:.38};
+}
+
+/* --- мелкий флотар по снятому рельефу: Leather037, ambientCG (CC0) ---
+   Из набора берётся только карта высот: цвет у образца ровный коричневый,
+   весь характер — в рельефе, а цвет кожи и так задаёт палитра. Затенение
+   борозд, нормали и блеск считаются из неё тем же путём, что у процедурных.
+   Вся карта — около 80 ячеек по стороне; чтобы ячейка вышла ~2,2 мм, как у
+   прежнего флотара, плитка этой выделки 180 мм, а не 55. Загоняя её в 55 мм,
+   получаем ячейку 0,7 мм — на общем плане это уже не кожа, а шум. */
+const HEIGHT_SRC={l037:"textures/leather037-height.jpg"};
+const HEIGHT_IMG={};
+/* высоты под размер карт: при пересборке сцены он мельчает, поэтому
+   хранится картинка, а не готовый массив */
+function heightsOf(kind,S){
+  const cv=document.createElement("canvas");
+  cv.width=cv.height=S;
+  const c=cv.getContext("2d");
+  c.drawImage(HEIGHT_IMG[kind],0,0,S,S);
+  const d=c.getImageData(0,0,S,S).data, h=new Float32Array(S*S);
+  for(let i=0;i<h.length;i++) h[i]=d[i*4]/255;
+  return h;
+}
+function hideL037(S){
+  return {h:heightsOf("l037",S), ST:.9, nscale:.62, aBase:.58, aSpan:.36, rBase:.60, rSpan:.16,
+          aoDepth:.45, tile:180};
+}
+/* Карта высот приходит картинкой, то есть не сразу. Не пришла или не
+   читается — кожа откатывается на процедурный флотар: страница без кожи
+   хуже, чем с другой. */
+function loadFinish(kind,done){
+  const src=HEIGHT_SRC[kind];
+  if(!src||HEIGHT_IMG[kind]){ done(); return; }
+  const fallback=function(){ state.finish="pebble"; done(); };
+  if(typeof Image==="undefined"){ fallback(); return; }
+  const img=new Image();
+  img.onload=function(){
+    HEIGHT_IMG[kind]=img;
+    try{ heightsOf(kind,8); }catch(e){ delete HEIGHT_IMG[kind]; fallback(); return; }
+    done();
+  };
+  img.onerror=fallback;
+  img.src=src;
+}
+const FINISHES={l037:hideL037, smooth:hideSmooth, pebble:hidePebble, saffiano:hideSaffiano};
+const FINISH_CACHE={};
+
+function leatherMaps(kind){
+  if(FINISH_CACHE[kind]) return FINISH_CACHE[kind];
+  const S=LOD.tex;
+  const f=FINISHES[kind](S, rngFrom(20260812));
+  const h=f.h;
+
+  const alb=document.createElement("canvas"); alb.width=alb.height=S;
+  const rgh=document.createElement("canvas"); rgh.width=rgh.height=S;
+  const nrm=document.createElement("canvas"); nrm.width=nrm.height=S;
+  const ac=alb.getContext("2d"), rc=rgh.getContext("2d"), nc=nrm.getContext("2d");
+  const ai=ac.createImageData(S,S), ri=rc.createImageData(S,S), ni=nc.createImageData(S,S);
+
+  /* Затенение в бороздах (карта полостей). В борозду между чешуйками свет
+     заходит хуже, чем на плато, — без этого кожа читается крашеным пластиком.
+     Считается как разница высоты и её же размытия: где точка ниже своего
+     окружения, там темнее. В отличие от рельефа это остаётся в albedo и
+     переживает уменьшение картинки. */
+  const blur=new Float32Array(S*S), tmp=new Float32Array(S*S), R=Math.max(2,Math.round(S/128));
+  (function(){
+    const n=R*2+1;
+    for(let y=0;y<S;y++) for(let x=0;x<S;x++){
+      let sum=0;
+      for(let k=-R;k<=R;k++) sum+=h[y*S+(((x+k)%S)+S)%S];
+      tmp[y*S+x]=sum/n;
+    }
+    for(let y=0;y<S;y++) for(let x=0;x<S;x++){
+      let sum=0;
+      for(let k=-R;k<=R;k++) sum+=tmp[((((y+k)%S)+S)%S)*S+x];
+      blur[y*S+x]=sum/n;
+    }
+  })();
+
+  for(let i=0;i<h.length;i++){
+    const v=h[i];
+    const cav=CLAMP(.5+(v-blur[i])*3.2);        // 0 — дно борозды, 1 — плато
+    const ao=1-f.aoDepth*(1-cav);
+    const a=Math.round(255*CLAMP((f.aBase+f.aSpan*v)*ao));
+    ai.data[i*4]=ai.data[i*4+1]=ai.data[i*4+2]=a; ai.data[i*4+3]=255;
+    // в борозде кожа глуше, на плато — глаже: отсюда неровный блеск
+    const r=Math.round(255*CLAMP(f.rBase-f.rSpan*v+(1-cav)*.10));
+    ri.data[i*4]=ri.data[i*4+1]=ri.data[i*4+2]=r; ri.data[i*4+3]=255;
+  }
+  for(let y=0;y<S;y++){
+    const yu=((y-1+S)%S)*S, yd=((y+1)%S)*S, yc=y*S;
+    for(let x=0;x<S;x++){
+      const xl=(x-1+S)%S, xr=(x+1)%S;
+      const dx=(h[yc+xl]-h[yc+xr])*f.ST;
+      const dy=(h[yd+x]-h[yu+x])*f.ST;
+      const L=Math.sqrt(dx*dx+dy*dy+1), o=(yc+x)*4;
+      ni.data[o]  =Math.round((dx/L*.5+.5)*255);
+      ni.data[o+1]=Math.round((dy/L*.5+.5)*255);
+      ni.data[o+2]=Math.round((1/L*.5+.5)*255);
+      ni.data[o+3]=255;
+    }
+  }
+  ac.putImageData(ai,0,0); rc.putImageData(ri,0,0); nc.putImageData(ni,0,0);
+
+  const mk=function(cv,srgb){
+    const t=new THREE.CanvasTexture(cv);
+    t.wrapS=t.wrapT=THREE.RepeatWrapping;
+    t.anisotropy=MAXAF;
+    if(srgb) t.encoding=THREE.sRGBEncoding;
+    return t;
+  };
+  FINISH_CACHE[kind]={albedo:mk(alb,true), rough:mk(rgh,false), normal:mk(nrm,false),
+                      nscale:f.nscale, tile:f.tile||TILE_MM};
+  return FINISH_CACHE[kind];
+}
+
+/* ===================================================== сборка сцены */
+const group=new THREE.Group(); scene.add(group);
+let leather=null, weltMat=null, tabMat=null;
+let SHELL=null, PICK_LIST=null;
+
+function assemble(MAPS){
+  tileMM=MAPS.tile;
+  SHELL=buildShell(LOD.shellN,LOD.shellM,true);
+
+  leather=new THREE.MeshPhysicalMaterial({
+    color:state.hide.hex,
+    map:MAPS.albedo, normalMap:MAPS.normal, roughnessMap:MAPS.rough,
+    normalScale:new THREE.Vector2(MAPS.nscale,MAPS.nscale),
+    roughness:1.0, metalness:0, reflectivity:.42,
+    clearcoat:.05, clearcoatRoughness:.62,
+    envMap:ENV, envMapIntensity:.16
+  });
+  SHELL.geos.forEach(g=>group.add(new THREE.Mesh(g,leather)));
+
+  // невидимый низкополигональный дубль — только для попадания курсора
+  const lo=buildShell(96,10,false), pm=new THREE.MeshBasicMaterial();
+  PICK_LIST=lo.geos.map(function(g){
+    const m=new THREE.Mesh(g,pm); m.updateMatrixWorld(); return m;
+  });
+
+  const plan=SHELL.plan.pts;
+
+  weltMat=new THREE.MeshPhysicalMaterial({color:state.hide.hex,roughness:.54,metalness:0,
+    clearcoat:.12,clearcoatRoughness:.45,envMap:ENV,envMapIntensity:.25});
+  tabMat=new THREE.MeshPhysicalMaterial({color:mixHex(state.hide.hex,0x000000,.18),
+    roughness:.6,metalness:0,clearcoat:.12,envMap:ENV,envMapIntensity:.22});
+  const steel=new THREE.MeshStandardMaterial({color:0xB6B6BA,roughness:.24,metalness:.97,
+    envMap:ENV,envMapIntensity:1.05});
+
+  // кант: шнур 3 мм, зажатый в шов по всему периметру.
+  // Ось шнура уводится внутрь на его радиус, чтобы кант не вылезал
+  // за габарит: 284 × 497 — это размер готовой вещи, вместе с кантом.
+  const weltNrm=SHELL.plan.nrm;
+  const weltCurve=new THREE.CatmullRomCurve3(
+    plan.map((p,i)=>new THREE.Vector3(p.x+weltNrm[i].x*1.7, p.y+weltNrm[i].y*1.7, 0)),
+    true,"centripetal",.5);
+  group.add(new THREE.Mesh(new THREE.TubeGeometry(weltCurve,LOD.welt,1.7,12,true),weltMat));
+
+  buildStrap(steel);
+  // сцена собрана заново — список треугольников растеризатора недействителен
+  if(SOFT) SOFT.dirty();
+}
+
+/* ================================ съёмный плечевой ремень
+   Крепёж на спинке, как на образце: два кожаных хлястика, пришитых к
+   задней половине, в них полукольца, на них карабины. Между карабинами
+   нейлоновая стропа 25 мм с рамкой-регулятором. */
+let STRAP=null;
+
+/* Протяжка плоской стропы. Ширина ленты кладётся в плоскость, в которой
+   висит ремень (planeN — нормаль этой плоскости), поэтому стропа видна
+   плашмя, а не ребром; дальше рамка переносится вдоль касательной и лента
+   не перекручивается. */
+function ribbon(curve,segs,halfW,halfT,mat,planeN){
+  const CS=[];
+  for(let i=0;i<12;i++){
+    const a=Math.PI*2*i/12;
+    const c=Math.cos(a), s=Math.sin(a), p=2.6;      // суперэллипс: плоская лента
+    CS.push([Math.sign(c)*Math.pow(Math.abs(c),2/p)*halfW,
+             Math.sign(s)*Math.pow(Math.abs(s),2/p)*halfT]);
+  }
+  const P=[],ID=[],W=CS.length;
+  const pn=(planeN||new THREE.Vector3(0,0,1)).clone().normalize();
+  let nrmV=new THREE.Vector3().crossVectors(pn,curve.getTangentAt(0)).normalize();
+  if(nrmV.lengthSq()<1e-6) nrmV.set(1,0,0);
+  for(let i=0;i<=segs;i++){
+    const t=i/segs;
+    const T=curve.getTangentAt(t).normalize();
+    nrmV.addScaledVector(T,-nrmV.dot(T));            // перенос вдоль касательной
+    if(nrmV.lengthSq()<1e-6) nrmV.copy(pn).cross(T);
+    nrmV.normalize();
+    const B=new THREE.Vector3().crossVectors(T,nrmV).normalize();
+    const p=curve.getPointAt(t);
+    for(let k=0;k<W;k++)
+      P.push(p.x+nrmV.x*CS[k][0]+B.x*CS[k][1],
+             p.y+nrmV.y*CS[k][0]+B.y*CS[k][1],
+             p.z+nrmV.z*CS[k][0]+B.z*CS[k][1]);
+  }
+  for(let i=0;i<segs;i++) for(let k=0;k<W;k++){
+    const a=i*W+k, b=i*W+(k+1)%W, c=(i+1)*W+k, d=(i+1)*W+(k+1)%W;
+    ID.push(a,c,d, a,d,b);
+  }
+  const g=new THREE.BufferGeometry();
+  g.setAttribute("position",new THREE.Float32BufferAttribute(P,3));
+  g.setIndex(ID); g.computeVertexNormals();
+  return new THREE.Mesh(g,mat);
+}
+
+function buildStrap(steel){
+  STRAP=new THREE.Group(); group.add(STRAP);
+  const web=new THREE.MeshStandardMaterial({color:mixHex(state.hide.hex,0x0A0A0A,.42),
+    roughness:.96,metalness:0,envMap:ENV,envMapIntensity:.08});
+  STRAP.userData.web=web;
+
+  /* Хлястик на спинке: дуга поперёк кожи, обе ножки лежат на поверхности,
+     под дугой проходит полукольцо. Высота спинки берётся из того же zAt,
+     что и сама оболочка, поэтому крепёж садится на кожу, а не в воздух. */
+  function mount(y){
+    const g=new THREE.Group(), pp=[], HALF=17, LIFT=11;
+    for(let i=0;i<=24;i++){
+      const f=i/24, a=Math.PI*f, yy=y-HALF+2*HALF*f;
+      const z0=-zAt(0,yy);
+      pp.push(new THREE.Vector3(0, yy, z0-Math.sin(a)*LIFT));
+    }
+    g.add(new THREE.Mesh(new THREE.TubeGeometry(
+      new THREE.CatmullRomCurve3(pp,false,"centripetal",.5),LOD.mount,3.2,9,false),tabMat));
+    // подложка под хлястиком: кусочек кожи поверх спинки, а не в ней
+    const zc=-zAt(0,y);
+    const pad=new THREE.Mesh(new THREE.BoxGeometry(30,50,1.8),tabMat);
+    pad.position.set(0,y,zc-1.1); g.add(pad);
+    /* Полукольцо стоит в плоскости натяжения (вдоль корпуса), но развёрнуто
+       на TILT в сторону, куда уходит стропа: так его видно кольцом, а не
+       линией, и карабин висит естественно. */
+    const ring=new THREE.Mesh(new THREE.TorusGeometry(9,1.9,10,26),steel);
+    ring.position.set(0,y,zc-LIFT-3.6);
+    ring.rotation.y=Math.PI/2-TILT;
+    g.add(ring);
+    STRAP.add(g);
+    return ring.position.clone();
+  }
+  const TILT=.52;
+  const aTop=mount( MM.l/2-72);
+  const aBot=mount(-MM.l/2+64);
+
+  /* Карабин: кольцо, корпус и подпружиненная лапка. Строится вниз по Y,
+     dir разворачивает его к своему концу чехла. */
+  function hook(at,dir){
+    const g=new THREE.Group();
+    const ring=new THREE.Mesh(new THREE.TorusGeometry(8.5,1.9,10,26),steel);
+    ring.rotation.y=Math.PI/2; g.add(ring);
+    const body=new THREE.Mesh(new THREE.BoxGeometry(4.6,17,5.2),steel);
+    body.position.y=-14; g.add(body);
+    const gate=new THREE.Mesh(new THREE.BoxGeometry(1.8,13,1.8),steel);
+    gate.position.set(0,-12,3.1); g.add(gate);
+    const eye=new THREE.Mesh(new THREE.TorusGeometry(6.0,1.6,10,22),steel);
+    eye.rotation.y=Math.PI/2; eye.position.y=-25; g.add(eye);
+    g.position.copy(at); g.scale.y=-dir; g.rotation.y=-TILT;
+    STRAP.add(g);
+    // конец стропы берём из самого ушка, с учётом разворота карабина
+    g.updateMatrixWorld(true);
+    return eye.getWorldPosition(new THREE.Vector3());
+  }
+  const hTop=hook(aTop, 1);
+  const hBot=hook(aBot,-1);
+
+  // сама стропа: от заднего крепежа уходит назад и вбок
+  const path=new THREE.CatmullRomCurve3([
+    hTop,
+    new THREE.Vector3(-24, MM.l/2-18, -74),
+    new THREE.Vector3(-116, 140, -146),
+    new THREE.Vector3(-162, -30, -178),
+    new THREE.Vector3(-122,-198, -150),
+    new THREE.Vector3(-30, -MM.l/2+18,-78),
+    hBot
+  ],false,"centripetal",.5);
+  // плоскость, в которой висит ремень: вдоль корпуса и вбок-назад
+  const PLANE=new THREE.Vector3(0,1,0).cross(new THREE.Vector3(-162,0,-178)).normalize();
+  STRAP.add(ribbon(path,LOD.strap,12.5,1.3,web,PLANE));
+
+  // рамка-регулятор с перекинутым через неё хвостом
+  (function(){
+    const t=.40, p=path.getPointAt(t), T=path.getTangentAt(t).normalize();
+    const g=new THREE.Group();
+    const bar=function(w,h,dx,dy){
+      const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,3.0),steel);
+      m.position.set(dx,dy,0); return m;
+    };
+    g.add(bar(31,2.6,0, 9),bar(31,2.6,0,-9),bar(2.6,20.6,14.2,0),bar(2.6,20.6,-14.2,0),
+          bar(29,2.2,0,0));
+    const up=Math.abs(T.z)<.9?new THREE.Vector3(0,0,1):new THREE.Vector3(1,0,0);
+    const nx=new THREE.Vector3().crossVectors(T,up).normalize();
+    const ny=new THREE.Vector3().crossVectors(nx,T).normalize();
+    g.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(nx,ny,T));
+    g.position.copy(p);
+    STRAP.add(g);
+
+    // короткий хвост, продетый в рамку
+    const tail=new THREE.CatmullRomCurve3([
+      p.clone().addScaledVector(T,-6).addScaledVector(nx,2.6),
+      p.clone().addScaledVector(T, 26).addScaledVector(nx,7),
+      p.clone().addScaledVector(T, 62).addScaledVector(nx,13)
+    ],false,"centripetal",.5);
+    STRAP.add(ribbon(tail,LOD.tail,12.5,1.2,web,PLANE));
+  })();
+
+  STRAP.visible=state.strap;
+}
+
+/* ================================================== монограмма */
+/* Канва оттиска: половинного размера от прежней. Восемь мегабайт под
+   три буквы ни к чему, а на слабой графике каждая крупная канва — риск. */
+const monoCv=document.createElement("canvas"); monoCv.width=1024; monoCv.height=512;
+const monoTex=new THREE.CanvasTexture(monoCv); monoTex.anisotropy=MAXAF;
+const mono=new THREE.Mesh(new THREE.BufferGeometry(),
+  new THREE.MeshBasicMaterial({map:monoTex,transparent:true,depthWrite:false}));
+mono.renderOrder=3; mono.userData.dyn=true; group.add(mono);
+const halo=new THREE.Line(new THREE.BufferGeometry(),
+  new THREE.LineBasicMaterial({color:0xF2F2F0,transparent:true,opacity:.55}));
+halo.renderOrder=4; halo.visible=false; group.add(halo);
+
+const FACES={
+  serif:'600 300px "Cormorant Garamond", Georgia, serif',
+  grot :'600 250px "Golos Text", Helvetica, Arial, sans-serif',
+  mono :'500 230px ui-monospace, Menlo, monospace'
+};
+function drawMono(){
+  const g=monoCv.getContext("2d");
+  g.clearRect(0,0,1024,512);
+  const txt=(state.initials||"").toUpperCase();
+  if(!txt){ monoTex.needsUpdate=true; return; }
+  g.font=FACES[state.face]; g.textAlign="center"; g.textBaseline="middle";
+  /* Блинтовый оттиск без canvas-фильтров: мягкость набирается повторными
+     отрисовками со сдвигом. Фильтры размытия идут через графическую
+     подсистему браузера и на сломанном драйвере роняют вкладку. */
+  const soft=function(dx,dy,rgba,spread,steps){
+    for(let i=0;i<steps;i++){
+      const a=Math.pow(1-i/steps,1.6)/steps*(rgba.indexOf("255,255,255")>0?1.1:2.3);
+      const r=spread*i/steps;
+      for(let k=0;k<6;k++){
+        const t=k/6*6.283;
+        g.fillStyle=rgba+(a*.42).toFixed(4)+")";
+        g.fillText(txt,512+dx+Math.cos(t)*r,256+dy+Math.sin(t)*r);
+      }
+    }
+  };
+  /* Настоящий блинт на тёмной коже — это прежде всего тень: свет ловит
+     только узкую кромку. Прежние пропорции читались белой наклейкой. */
+  soft( -6, -6,"rgba(0,0,0,",      7,4);      // тень с тёмной стороны
+  soft(  5,  5,"rgba(255,255,255,",5,3);      // узкий блик со светлой
+  soft(  0,  0,"rgba(0,0,0,",      2.2,3);    // мягкая сердцевина
+  g.lineWidth=2.4; g.strokeStyle="rgba(0,0,0,.42)"; g.strokeText(txt,512,256);
+  monoTex.needsUpdate=true;
+  if(SOFT) SOFT.touch();
+}
+
+function halfWidthAt(y){
+  const p=PICK.pts; let m=0;
+  for(let i=0;i<p.length;i++) if(Math.abs(p[i].y-y)<9) m=Math.max(m,Math.abs(p[i].x));
+  if(m===0){ for(let i=0;i<p.length;i++) if(Math.abs(p[i].y-y)<26) m=Math.max(m,Math.abs(p[i].x)); }
+  return m||40;
+}
+function clampPos(x,y){
+  const yy=Math.max(-215,Math.min(205,y));
+  const hw=Math.max(10,halfWidthAt(yy)-state.size-14);
+  state.pos.x=Math.max(-hw,Math.min(hw,x));
+  state.pos.y=yy;
+}
+
+/* сетка монограммы садится на поверхность — на куполе идёт по кривизне */
+function layoutMono(){
+  const h=state.size, w=h*2, NX=18, NY=9, LIFT=1.2;
+  const P=[],UV=[],ID=[];
+  for(let j=0;j<=NY;j++) for(let i=0;i<=NX;i++){
+    const fx=i/NX, fy=j/NY;
+    const x=state.pos.x+(fx-.5)*w, y=state.pos.y+(.5-fy)*h;
+    const s=project(x,y);
+    P.push(x+s.n.x*LIFT, y+s.n.y*LIFT, s.z+s.n.z*LIFT);
+    UV.push(fx,1-fy);
+  }
+  for(let j=0;j<NY;j++) for(let i=0;i<NX;i++){
+    const a=j*(NX+1)+i,b=a+1,c=a+NX+1,d=c+1;
+    ID.push(a,c,d, a,d,b);
+  }
+  const g=new THREE.BufferGeometry();
+  g.setAttribute("position",new THREE.Float32BufferAttribute(P,3));
+  g.setAttribute("uv",new THREE.Float32BufferAttribute(UV,2));
+  g.setIndex(ID); g.computeVertexNormals();
+  mono.geometry.dispose(); mono.geometry=g;
+  if(SOFT) SOFT.touch();
+
+  const hw=w*.60, hh=h*.72, ring=[];
+  for(let i=0;i<=48;i++){
+    const t=i/48*4, e=Math.floor(t)%4, f=t-Math.floor(t);
+    let dx,dy;
+    if(e===0){dx=-hw+2*hw*f; dy=hh;} else if(e===1){dx=hw; dy=hh-2*hh*f;}
+    else if(e===2){dx=hw-2*hw*f; dy=-hh;} else {dx=-hw; dy=-hh+2*hh*f;}
+    const x=state.pos.x+dx, y=state.pos.y+dy, s=project(x,y);
+    ring.push(new THREE.Vector3(x+s.n.x*1.6, y+s.n.y*1.6, s.z+s.n.z*1.6));
+  }
+  halo.geometry.dispose();
+  halo.geometry=new THREE.BufferGeometry().setFromPoints(ring);
+
+  document.getElementById("posVal").textContent=Math.round(state.pos.x)+" · "+Math.round(state.pos.y);
+  document.getElementById("posX").value=Math.round(state.pos.x);
+  document.getElementById("posY").value=Math.round(state.pos.y);
+  fillSummary();
+}
+
+/* ================================================== камера и указатель */
+/* Ракурсы задают только поворот. Расстояние считается под размер сцены,
+   иначе на невысоком окне вещь просто не влезает в кадр. */
+const VIEWS={hero:[-.42,.30], front:[0,.02], edge:[-1.50,.10], back:[Math.PI,.16]};
+let yaw=-.42,pitch=.30,dist=1180,want=null,userZoom=false;
+function fitDist(){
+  const vFov=camera.fov*Math.PI/180;
+  const t=Math.tan(vFov/2);
+  const dV=(MM.l*.60)/t;                       // по высоте, с полями
+  const dH=(MM.w*.62)/(t*Math.max(.2,camera.aspect));  // по ширине
+  return Math.max(620,Math.min(2400,Math.max(dV,dH)));
+}
+function viewTo(name){ return VIEWS[name].concat([fitDist()]); }
+function placeCamera(){
+  camera.position.set(dist*Math.cos(pitch)*Math.sin(yaw),dist*Math.sin(pitch),dist*Math.cos(pitch)*Math.cos(yaw));
+  camera.lookAt(0,0,0);
+}
+function resize(){
+  const w=stage.clientWidth,h=stage.clientHeight;
+  if(MODE==="gl") renderer.setSize(w,h,false); else SOFT.setSize(w,h);
+  camera.aspect=w/h; camera.fov=w<620?40:30; camera.updateProjectionMatrix();
+  if(!userZoom&&!want){ dist=fitDist(); placeCamera(); }
+  /* Смена размера пересоздаёт буфер, то есть стирает картинку. В обычном
+     режиме её вернёт следующий кадр — но только если он поймёт, что размер
+     другой, поэтому размер входит в признак кадра. В режиме съёмки цикла
+     нет вовсе, рисуем сразу. */
+  if(MODE==="soft"&&SOFT&&SHOT) draw();
+}
+function draw(){
+  if(MODE==="gl") renderer.render(scene,camera); else SOFT.render(scene,camera);
+}
+addEventListener("resize",resize);
+
+const ray=new THREE.Raycaster(), ptr=new THREE.Vector2();
+let mode=null,last={x:0,y:0},idle=true,grab=null;
+const pset=new Map(); let pinch0=0,dist0=0;
+const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
+let cv=(MODE==="gl")?renderer.domElement:SOFT.domElement;
+
+function faceHit(e){
+  if(!PICK_LIST) return null;
+  const r=cv.getBoundingClientRect();
+  ptr.x=((e.clientX-r.left)/r.width)*2-1;
+  ptr.y=-((e.clientY-r.top)/r.height)*2+1;
+  ray.setFromCamera(ptr,camera);
+  const h=ray.intersectObjects(PICK_LIST,false)[0];
+  return (h && h.face.normal.z>.25) ? h.point.clone() : null;
+}
+function onMono(p){
+  return !!p && Math.abs(p.x-state.pos.x)<state.size*1.3
+             && Math.abs(p.y-state.pos.y)<state.size*1.0;
+}
+function pinchDist(){
+  const a=Array.from(pset.values());
+  return Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);
+}
+
+document.getElementById("views").addEventListener("click",function(e){
+  const b=e.target.closest("button"); if(!b) return;
+  if(b.id==="softBtn"){ switchToSoft("switched by hand"); return; }
+  if(!b.dataset.view) return;
+  markView(b.dataset.view);
+  idle=false; document.getElementById("hint").style.opacity=0;
+  want=viewTo(b.dataset.view);
+});
+if(MODE==="gl"){                       // запасной выход, если сцена осталась пустой
+  const b=document.createElement("button");
+  b.id="softBtn"; b.textContent="Blank? Draw it here";
+  b.title="Render the case in software instead of WebGL";
+  document.getElementById("views").appendChild(b);
+}
+
+/* Подсветка выбранного ракурса. Снимается, как только зритель сам повернул
+   модель: подсвеченная кнопка тогда уже врёт. */
+function markView(name){
+  const box=document.getElementById("views");
+  if(!box) return;
+  for(const b of box.children)
+    if(b.dataset&&b.dataset.view)
+      b.setAttribute("aria-pressed", b.dataset.view===name?"true":"false");
+}
+function bindPointer(el){
+el.addEventListener("pointerdown",function(e){
+  cv.setPointerCapture(e.pointerId);
+  pset.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  idle=false; want=null; markView(null);
+  document.getElementById("hint").style.opacity=0;
+  if(pset.size===2){ mode="pinch"; pinch0=pinchDist(); dist0=dist; return; }
+  const p=faceHit(e);
+  if(onMono(p)){ mode="move"; grab={dx:p.x-state.pos.x,dy:p.y-state.pos.y};
+    halo.visible=true; cv.style.cursor="grabbing"; }
+  else { mode="orbit"; cv.style.cursor="move"; }
+  last.x=e.clientX; last.y=e.clientY;
+});
+el.addEventListener("pointermove",function(e){
+  if(pset.has(e.pointerId)) pset.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(mode==="pinch"){
+    if(pset.size===2&&pinch0>0){
+      userZoom=true;
+      dist=Math.max(620,Math.min(2400,dist0*pinch0/pinchDist())); placeCamera();
+    }
+    return;
+  }
+  if(!mode){
+    const over=onMono(faceHit(e));
+    halo.visible=over; cv.style.cursor=over?"grab":"default";
+    return;
+  }
+  if(mode==="orbit"){
+    yaw-=(e.clientX-last.x)*.0072;
+    pitch+=(e.clientY-last.y)*.0060;
+    pitch=Math.max(-1.32,Math.min(1.32,pitch));
+    last.x=e.clientX; last.y=e.clientY; placeCamera();
+  } else if(mode==="move"){
+    const p=faceHit(e); if(!p) return;
+    clampPos(p.x-grab.dx,p.y-grab.dy); layoutMono();
+  }
+});
+function endPtr(e){
+  pset.delete(e.pointerId);
+  if(mode==="pinch"&&pset.size<2) mode=null;
+  if(pset.size===0){ mode=null; halo.visible=false; cv.style.cursor="default"; }
+}
+el.addEventListener("pointerup",endPtr);
+el.addEventListener("pointercancel",endPtr);
+el.addEventListener("wheel",function(e){
+  e.preventDefault(); idle=false; want=null; markView(null); userZoom=true;
+  dist=Math.max(620,Math.min(2400,dist+e.deltaY*.9)); placeCamera();
+},{passive:false});
+}
+bindPointer(cv);
+
+/* ================================== переход на программный рендер на ходу
+   Нужен, когда WebGL формально есть, а картинки нет: контекст создаётся,
+   кадр уходит в никуда. Сцену приходится пересобрать — у растеризатора
+   своя тесселяция.                                                      */
+function switchToSoft(reason){
+  if(MODE==="soft") return;
+  GLFAIL=reason||"";
+  try{
+    SOFT=makeSoft(stage);
+  }catch(e){
+    noWebGL((reason||"")+" / "+((e&&e.message)||e));
+    return;
+  }
+  MODE="soft"; LOD=lodFor("soft");
+  try{ renderer.dispose(); }catch(e){}
+  const old=renderer.domElement;
+  if(old&&old.parentNode) old.parentNode.removeChild(old);
+  cv=SOFT.domElement; bindPointer(cv);
+  rebuildScene();
+  resize(); lastKey=""; draw();
+  softNote();
+}
+function rebuildScene(){
+  for(let i=group.children.length-1;i>=0;i--){
+    const o=group.children[i];
+    if(o===mono||o===halo) continue;
+    group.remove(o);
+    o.traverse(function(c){ if(c.geometry&&c.geometry.dispose) c.geometry.dispose(); });
+  }
+  STRAP=null;
+  for(const k in FINISH_CACHE) delete FINISH_CACHE[k];   // карты пересчитаются мельче
+  assemble(leatherMaps(state.finish));
+  drawMono(); layoutMono();
+  if(SOFT) SOFT.dirty();
+}
+function softNote(){
+  stage.classList.add("soft");
+  // ручка для замеров и отладки: кадр можно попросить снаружи
+  window.__zhSoft={renderer:SOFT,scene:scene,camera:camera};
+  const h=document.getElementById("hint");
+  h.style.opacity="";
+  h.innerHTML="Drawn in software \u00b7 drag to rotate \u00b7 "+
+              "drag the initials to move them";
+  const b=document.getElementById("softBtn");
+  if(b&&b.parentNode) b.parentNode.removeChild(b);
+}
+
+/* ================================================== панель */
+const swWrap=document.getElementById("swatches");
+HIDES.forEach(function(h,i){
+  const b=document.createElement("button");
+  b.className="sw"; b.style.background="#"+h.hex.toString(16).padStart(6,"0");
+  b.setAttribute("aria-pressed",i===0?"true":"false");
+  b.setAttribute("aria-label",h.name); b.title=h.name;
+  b.onclick=function(){
+    state.hide=h;
+    for(const c of swWrap.children) c.setAttribute("aria-pressed","false");
+    b.setAttribute("aria-pressed","true");
+    document.getElementById("hideName").textContent=h.name;
+    if(leather){
+      leather.color.setHex(h.hex);
+      weltMat.color.setHex(h.hex);
+      tabMat.color.setHex(mixHex(h.hex,0x000000,.18));
+      if(STRAP) STRAP.userData.web.color.setHex(mixHex(h.hex,0x0A0A0A,.42));
+      if(SOFT) SOFT.dirty();
+    }
+    fillSummary();
+  };
+  swWrap.appendChild(b);
+});
+/* Выделка одна: крупный флотар. Переключатель убран — кожа у вещи одна. */
+
+document.getElementById("strap").addEventListener("click",function(e){
+  const b=e.target.closest("button"); if(!b) return;
+  for(const c of this.children) c.setAttribute("aria-pressed","false");
+  b.setAttribute("aria-pressed","true");
+  state.strap=(b.dataset.v==="on");
+  if(STRAP) STRAP.visible=state.strap;
+  if(SOFT) SOFT.dirty();
+  fillSummary();
+});
+document.getElementById("face").addEventListener("click",function(e){
+  const b=e.target.closest("button"); if(!b) return;
+  for(const c of this.children) c.setAttribute("aria-pressed","false");
+  b.setAttribute("aria-pressed","true");
+  state.face=b.dataset.v; drawMono(); fillSummary();
+});
+const initsEl=document.getElementById("inits");
+initsEl.addEventListener("input",function(){
+  const v=initsEl.value.replace(/[^A-Za-zА-Яа-яЁё]/g,"").toUpperCase().slice(0,3);
+  initsEl.value=v; state.initials=v;
+  document.getElementById("count").textContent =
+    v.length ? v.length+" of 3 characters" : "up to three characters · Latin or Cyrillic";
+  drawMono(); fillSummary();
+});
+const sizeEl=document.getElementById("size");
+sizeEl.addEventListener("input",function(){
+  state.size=+sizeEl.value;
+  document.getElementById("sizeVal").textContent=state.size+" mm";
+  clampPos(state.pos.x,state.pos.y); layoutMono();
+});
+document.getElementById("posX").addEventListener("input",function(e){ clampPos(+e.target.value,state.pos.y); layoutMono(); });
+document.getElementById("posY").addEventListener("input",function(e){ clampPos(state.pos.x,+e.target.value); layoutMono(); });
+document.getElementById("reset").onclick=function(){
+  state.size=28; sizeEl.value=28;
+  document.getElementById("sizeVal").textContent="28 mm";
+  clampPos(0,88); layoutMono(); userZoom=false; want=viewTo("hero"); markView("hero");
+};
+document.getElementById("save").onclick=function(){
+  halo.visible=false;
+  if(MODE==="soft"){ SOFT.setQuality(2.2); draw(); }
+  else draw();
+  const a=document.createElement("a");
+  a.download="zh-case-"+state.hide.id+"-"+(state.initials||"no-initials")+".png";
+  a.href=cv.toDataURL("image/png"); a.click();
+  if(MODE==="soft"){ SOFT.setQuality(1); draw(); }
+};
+
+/* ================================================== заказ
+   Форма живёт в своём скрипте и работает даже без 3D. Отсюда ей
+   передаётся текущая конфигурация — и только она.                  */
+const FACE_NAME={serif:"Cormorant, serif",grot:"Golos, grotesque",mono:"Monospace"};
+function fillSummary(){
+  if(!window.__zhSetSpec) return;
+  window.__zhSetSpec({
+    leather:state.hide.name,
+    initials:state.initials||"none",
+    typeface:FACE_NAME[state.face],
+    impression:state.size+" mm",
+    placement:Math.round(state.pos.x)+" mm across, "+Math.round(state.pos.y)+" mm along",
+    strap:state.strap?"detachable, 25 mm webbing":"detachable, 25 mm webbing (shown off)",
+    size:MM.w+" × "+MM.l+" × "+MM.t+" mm"
+  });
+}
+
+/* ================================================== запуск */
+/* В режиме WebGL кадр рисуется всегда. Программный растеризатор рисует
+   только когда что-то изменилось, и пока крутят — вчетверо мельче:
+   иначе перетаскивание оттиска превращается в слайд-шоу. */
+const SHOT=/[?&]shot\b/.test(location.search);
+let lastKey="", busy=0, glCheck=0;
+/* Проверка, что WebGL действительно что-то нарисовал. Контекст может
+   создаваться, а кадр уходить в никуда — тогда человек видит пустоту.
+   Читаем три строки готового кадра: если всюду прозрачно, рисуем сами. */
+function glFrameEmpty(){
+  try{
+    const gl=renderer.getContext();
+    const w=gl.drawingBufferWidth|0, h=gl.drawingBufferHeight|0;
+    if(!w||!h) return true;
+    const px=new Uint8Array(w*4);
+    let hit=0;
+    [Math.floor(h*.36),Math.floor(h*.5),Math.floor(h*.64)].forEach(function(row){
+      gl.readPixels(0,row,w,1,gl.RGBA,gl.UNSIGNED_BYTE,px);
+      for(let i=3;i<px.length;i+=4) if(px[i]>8) hit++;
+    });
+    return hit<12;
+  }catch(e){ return true; }
+}
+function tick(){
+  requestAnimationFrame(tick);
+  if(want){
+    yaw+=(want[0]-yaw)*.10; pitch+=(want[1]-pitch)*.10; dist+=(want[2]-dist)*.10;
+    if(Math.abs(want[0]-yaw)<.002&&Math.abs(want[2]-dist)<1.5){
+      yaw=want[0]; pitch=want[1]; dist=want[2]; want=null;
+    }
+    placeCamera();
+  } else if(idle&&!reduced&&MODE==="gl"){ yaw+=.0016; placeCamera(); }
+
+  if(MODE==="gl"){
+    renderer.render(scene,camera);
+    if(glCheck>=0 && ++glCheck>6){        // кадру дают несколько тактов устояться
+      glCheck=-1;
+      if(glFrameEmpty()) switchToSoft("WebGL produced an empty frame");
+    }
+    return;
+  }
+
+  const moving=(mode!==null)||(want!==null);
+  SOFT.setQuality(moving?.52:1);
+  const st=SOFT.stats();
+  const key=yaw.toFixed(4)+"|"+pitch.toFixed(4)+"|"+dist.toFixed(1)+"|"+
+            (moving?"m":"s")+"|"+SOFT.rev()+"|"+st.w+"x"+st.h;
+  if(key===lastKey) return;
+  lastKey=key;
+  const t0=(window.performance&&performance.now)?performance.now():0;
+  SOFT.render(scene,camera);
+  if(t0) busy=(busy?busy*.7:0)+ .3*(performance.now()-t0);
+}
+function boot(){
+  resize(); dist=fitDist(); placeCamera();
+  requestAnimationFrame(function(){
+    setTimeout(function(){ loadFinish(state.finish,function(){
+      assemble(leatherMaps(state.finish));
+      drawMono(); clampPos(state.pos.x,state.pos.y); layoutMono();
+      if(MODE==="soft"){ softNote(); }
+
+      /* Снимок сцены для заявки: чистовой кадр без рамки вокруг оттиска.
+         Отдаётся data-URL, дальше его забирает форма заказа. */
+      window.__zhSnapshot=function(){
+        try{
+          const wasHalo=halo.visible;
+          halo.visible=false;
+          if(MODE==="soft"){ SOFT.setQuality(1); draw(); }
+          else draw();
+          const url=cv.toDataURL("image/png");
+          halo.visible=wasHalo;
+          return (url&&url.length>2000)?url:null;
+        }catch(e){ return null; }
+      };
+      stage.classList.add("ready");
+      if(SHOT){                       // один чистовой кадр и остановиться
+        if(MODE==="soft"){ SOFT.setQuality(1); SOFT.render(scene,camera); }
+        else renderer.render(scene,camera);
+        return;
+      }
+      tick();
+    }); },30);
+  });
+}
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(function(){ boot(); setTimeout(drawMono,150); });
+else boot();
+
+})();
+</script>
+</html>
