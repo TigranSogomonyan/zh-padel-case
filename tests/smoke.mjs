@@ -100,7 +100,7 @@ try {
             level: el.tagName.toLowerCase(), text: visibleText(el)
           })).slice(0, 30),
           controls: {
-            buttons: buttons.map((el) => ({ text: visibleText(el), name: accessibleName(el) })).slice(0, 50),
+            buttons: buttons.map((el) => ({ tag: el.tagName.toLowerCase(), role: el.getAttribute('role'), text: visibleText(el), name: accessibleName(el) })).slice(0, 50),
             fields: inputs.map((el) => ({
               tag: el.tagName.toLowerCase(), type: el.type || null,
               name: accessibleName(el), placeholder: el.getAttribute('placeholder')
