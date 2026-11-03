@@ -1,0 +1,18 @@
+[
+  {
+    "scenario": "offline",
+    "passed": true
+  },
+  {
+    "scenario": "unconfirmed",
+    "passed": true
+  },
+  {
+    "scenario": "confirmed",
+    "passed": true
+  },
+  {
+    "scenario": "blocked-clipboard",
+    "passed": true
+  }
+]

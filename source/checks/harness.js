@@ -105,7 +105,7 @@ module.exports=module.exports||{};
 const REG={};
 function mkEl(id,tag){
   const el={
-    id:id, tagName:(tag||"div").toUpperCase(), dataset:{}, style:{}, children:[],
+    id:id, tagName:(tag||"div").toUpperCase(), dataset:{}, style:{setProperty(k,v){this[k]=v;}}, children:[],
     value:"", textContent:"", innerHTML:"", disabled:false, title:"",
     firstChild:{nodeValue:""},
     _on:{},
@@ -129,7 +129,7 @@ function mkEl(id,tag){
 ["stage","views","hint","hideName","swatches","finish","inits","count","face",
  "size","sizeVal","posVal","posX","posY","save","reset","zipLen","finishNote",
  "strap","summary","orderForm","ordName","ordMail","ordTg","ordNote","ordSend",
- "ordCopy","ordStatus"].forEach(id=>REG[id]=mkEl(id));
+ "ordCopy","ordStatus","orderHelp","orderTitle","orderIntro"].forEach(id=>REG[id]=mkEl(id));
 
 const document={
   documentElement:mkEl("html","html"),

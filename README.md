@@ -62,3 +62,5 @@ GitHub Actions запускает тест при pull request и push в `main`
 - [Инструкция для продолжения в Codex](docs/CODEX_HANDOFF.md) — задача для оригинальной рабочей папки с исходниками.
 
 Правки собранного `index.html` здесь не заменяют правок оригинальных исходников.
+
+Исходники frontend и первый этап улучшений: [docs/STAGE1_IMPLEMENTATION.md](docs/STAGE1_IMPLEMENTATION.md). Review-сборка через `npm run build:stage1` не меняет опубликованный корневой HTML.

@@ -8,7 +8,7 @@ import { chromium } from 'playwright';
 
 const rootDir = join(dirname(fileURLToPath(import.meta.url)), '..');
 const outputDir = join(rootDir, 'artifacts');
-const html = await readFile(join(rootDir, 'index.html'));
+const html = await readFile(join(rootDir, process.env.ZH_HTML || 'index.html'));
 
 await mkdir(outputDir, { recursive: true });
 
@@ -51,7 +51,7 @@ const configurations = [
 let browser;
 const results = [];
 try {
-  browser = await chromium.launch({ headless: true });
+  browser = await chromium.launch({ headless: true, ...(process.env.CHROME_PATH ? {executablePath: process.env.CHROME_PATH} : {}) });
 
   for (const { name, options } of configurations) {
     const context = await browser.newContext({
@@ -167,7 +167,7 @@ try {
       const backActivated = await page.evaluate(() => {
         const controls = [...document.querySelectorAll('button, [role="button"]')];
         const back = controls.find((el) =>
-          (el.innerText || el.textContent || '').trim() === 'BACK'
+          (el.innerText || el.textContent || '').trim().toLowerCase() === 'back'
         );
         if (!back) return false;
         back.click();
@@ -184,6 +184,50 @@ try {
         timeout: 60_000
       });
       console.log(name + ': camera switch updated the 3D canvas');
+
+      if (process.env.ZH_STAGE1) {
+        assert.equal(state.accessibilityAudit.unlabeledFields, 0);
+        assert.equal(state.accessibilityAudit.unlabeledButtons, 0);
+        const targets = await page.locator('.sw, .views button').evaluateAll(elements => elements.map(el => {
+          const r = el.getBoundingClientRect();
+          return {name: el.getAttribute('aria-label') || el.textContent, x:r.x,y:r.y,w:r.width,h:r.height};
+        }));
+        if (options.isMobile) {
+          for (const r of targets) assert.ok(r.w >= 44 && r.h >= 44, JSON.stringify(r));
+          for (let i=0;i<targets.length;i++) for(let j=i+1;j<targets.length;j++) {
+            const a=targets[i],b=targets[j];
+            assert.ok(a.x+a.w<=b.x+.1 || b.x+b.w<=a.x+.1 || a.y+a.h<=b.y+.1 || b.y+b.h<=a.y+.1, 'Overlapping targets');
+          }
+          await page.locator('.order-jump').click();
+          assert.equal(await page.locator('#orderTitle').evaluate(el => el===document.activeElement),true);
+        }
+        for (const label of ['Across','Along']) {
+          const range=page.getByRole('slider',{name:label,exact:true});
+          await range.focus();
+          const previous=await range.inputValue();
+          await page.keyboard.press('ArrowRight');
+          assert.notEqual(await range.inputValue(),previous);
+          assert.equal(await range.evaluate(el => getComputedStyle(el).outlineStyle),'solid');
+        }
+        const aqua=page.getByRole('button',{name:'Aqua',exact:true});
+        await aqua.focus(); await page.keyboard.press('Enter');
+        assert.equal(await aqua.getAttribute('aria-pressed'),'true');
+        await page.getByRole('button',{name:'Burgundy',exact:true}).click();
+        const downloadPromise=page.waitForEvent('download');
+        await page.getByRole('button',{name:'Save preview',exact:true}).click();
+        const download=await downloadPromise;
+        const pngPath=join(outputDir,'preview-'+name+'.png');
+        await download.saveAs(pngPath);
+        const png=await readFile(pngPath);
+        assert.equal(png.subarray(0,8).toString('hex'),'89504e470d0a1a0a');
+        assert.ok(png.length>1000);
+        await context.grantPermissions(['clipboard-read','clipboard-write']);
+        await page.getByRole('button',{name:'Copy configuration',exact:true}).click();
+        assert.match(await page.evaluate(()=>navigator.clipboard.readText()),/leather: Burgundy/);
+        assert.match(await page.locator('#ordStatus').innerText(),/no request has been sent/);
+        await page.screenshot({path:join(outputDir,'zh-'+name+'-order.png'),fullPage:true});
+        state.touchTargets=targets;
+      }
 
       assert.deepEqual(pageErrors, [], name + ': uncaught JavaScript errors');
       results.push({ viewport: name, ...state, screenshot });

@@ -39,6 +39,7 @@
   --dim:#585D67;
   --line:rgba(237,237,234,.13);
   --line-2:rgba(237,237,234,.07);
+  --hide:#22304A;        /* default leather swatch */
   --warn:#D98A6A;
 
   --display:"Cormorant Garamond",Georgia,"Times New Roman",serif;
@@ -58,7 +59,7 @@ body{background:var(--ink);color:var(--bone);font-family:var(--ui);
 button,input,textarea,select{font:inherit;color:inherit;background:transparent}
 button{cursor:pointer;border:none}
 ::selection{background:var(--bone);color:var(--ink)}
-:focus-visible{outline:1px solid var(--bone);outline-offset:3px}
+:focus-visible{outline:2px solid var(--bone);outline-offset:3px}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
 /* Chrome красит автозаполненные поля своим светлым фоном — отменяется
@@ -153,16 +154,17 @@ h1 em{font-style:italic;color:var(--muted)}
   font-size:var(--t-xs);font-variant-numeric:tabular-nums;letter-spacing:.04em}
 
 .swatches{display:grid;grid-template-columns:repeat(6,1fr);gap:calc(var(--u)*1.25)}
-.sw{aspect-ratio:1;border-radius:50%;position:relative;transition:transform .18s;
+.sw{aspect-ratio:1;border-radius:50%;position:relative;background:transparent}
+.sw::before{content:"";position:absolute;inset:0;border-radius:50%;background:var(--hide);
   box-shadow:inset 0 0 0 1px rgba(255,255,255,.16), inset 0 -6px 12px rgba(0,0,0,.55)}
-.sw:hover{transform:scale(1.08)}
+.sw:hover::before{filter:brightness(1.12)}
 .sw[aria-pressed="true"]::after{content:"";position:absolute;inset:-5px;
   border-radius:50%;border:1px solid var(--bone)}
 
 .inits{width:100%;border:none;border-bottom:1px solid var(--line);
   padding:2px 0 10px;font-family:var(--display);font-size:46px;line-height:1.1;
   letter-spacing:.2em;text-indent:.2em;text-align:center;text-transform:uppercase}
-.inits:focus{outline:none;border-bottom-color:var(--bone)}
+.inits:focus{border-bottom-color:var(--bone)}
 .inits::placeholder{color:var(--dim)}
 .count{margin-top:calc(var(--u)*1.25);color:var(--muted);text-align:center;line-height:1.7}
 
@@ -184,7 +186,7 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border:none;border-ra
 input[type=range]:active::-webkit-slider-thumb{cursor:grabbing}
 
 .pair{display:grid;grid-template-columns:1fr 1fr;gap:calc(var(--u)*2.5)}
-.pair small{display:block;color:var(--muted)}
+.pair label{display:block;color:var(--muted)}
 
 .actions{display:flex;gap:calc(var(--u)*1.25);padding-top:calc(var(--u)*3)}
 .btn{flex:1;padding:15px 12px;border-radius:2px;transition:.16s;text-align:center}
@@ -193,6 +195,8 @@ input[type=range]:active::-webkit-slider-thumb{cursor:grabbing}
 .btn-b{border:1px solid var(--line);color:var(--muted)}
 .btn-b:hover{border-color:var(--bone);color:var(--bone)}
 
+ .order-jump{display:none}
+#order{scroll-margin-top:24px}
 /* ==================================================== спецификация */
 .specs{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin:0;
   background:var(--line-2);border:1px solid var(--line);border-top:none}
@@ -231,7 +235,7 @@ input[type=range]:active::-webkit-slider-thumb{cursor:grabbing}
 .fld i{font-style:normal;letter-spacing:.12em;color:var(--dim)}
 .fld input,.fld textarea{border:none;border-bottom:1px solid var(--line);
   padding:10px 0;font-size:var(--t-m);border-radius:0;resize:vertical}
-.fld input:focus,.fld textarea:focus{outline:none;border-bottom-color:var(--bone)}
+.fld input:focus,.fld textarea:focus{border-bottom-color:var(--bone)}
 .fld input.bad,.fld textarea.bad{border-bottom-color:var(--warn)}
 .order-actions{display:flex;gap:calc(var(--u)*1.25);margin-top:var(--u)}
 .order-status{min-height:1.5em;font-size:var(--t-s);color:var(--muted);line-height:1.6}
@@ -271,7 +275,18 @@ input[type=range]:active::-webkit-slider-thumb{cursor:grabbing}
   .lede{padding:calc(var(--u)*5) 0 calc(var(--u)*3)}
   .specs{grid-template-columns:1fr}
   .views{left:var(--u);top:var(--u)}
-  .views button{padding:8px 10px}
+  .views{right:var(--u);display:grid;grid-template-columns:repeat(4,minmax(44px,1fr))}
+  .views button{min-height:44px;padding:8px 4px;letter-spacing:0}
+  .swatches{gap:6px;grid-template-columns:repeat(6,minmax(44px,1fr))}
+  .sw{width:44px;height:44px;justify-self:center}
+  .sw::before{inset:50% auto auto 50%;transform:translate(-50%,-50%);
+    width:clamp(30px,calc(20vw - 36px),42px);height:clamp(30px,calc(20vw - 36px),42px)}
+  .sw[aria-pressed="true"]::after{inset:0}
+  .seg button{min-height:44px}
+  .order-jump{display:block;margin-top:24px;text-decoration:none}
+}
+@media(max-width:380px){
+  .swatches{grid-template-columns:repeat(3,1fr);row-gap:10px}
 }
 </style>
 
@@ -327,9 +342,9 @@ input[type=range]:active::-webkit-slider-thumb{cursor:grabbing}
       <div class="field">
         <div class="legend"><span>Die typeface</span></div>
         <div class="seg serif" id="face">
-          <button data-v="serif" aria-pressed="true">Ab</button>
-          <button data-v="grot" aria-pressed="false" style="font-family:var(--ui);font-size:14px">Ab</button>
-          <button data-v="mono" aria-pressed="false" style="font-family:ui-monospace,Menlo,monospace;font-size:14px">Ab</button>
+          <button data-v="serif" aria-label="Cormorant Garamond, serif" aria-pressed="true">Ab</button>
+          <button data-v="grot" aria-label="Golos Text, sans serif" aria-pressed="false" style="font-family:var(--ui);font-size:14px">Ab</button>
+          <button data-v="mono" aria-label="Monospace" aria-pressed="false" style="font-family:ui-monospace,Menlo,monospace;font-size:14px">Ab</button>
         </div>
       </div>
 
@@ -341,8 +356,8 @@ input[type=range]:active::-webkit-slider-thumb{cursor:grabbing}
       <div class="field">
         <div class="legend"><span>Impression position</span><i id="posVal">0 · 88</i></div>
         <div class="pair">
-          <div><small>Across</small><input type="range" id="posX" min="-120" max="120" value="0" step="1"></div>
-          <div><small>Along</small><input type="range" id="posY" min="-215" max="205" value="88" step="1"></div>
+          <div><label for="posX">Across</label><input type="range" id="posX" min="-120" max="120" value="0" step="1"></div>
+          <div><label for="posY">Along</label><input type="range" id="posY" min="-215" max="205" value="88" step="1"></div>
         </div>
       </div>
 
@@ -350,6 +365,7 @@ input[type=range]:active::-webkit-slider-thumb{cursor:grabbing}
         <button class="btn btn-a" id="save">Save preview</button>
         <button class="btn btn-b" id="reset">Reset</button>
       </div>
+      <a class="btn btn-a order-jump" href="#order">Continue to request</a>
     </aside>
   </main>
 
@@ -367,8 +383,8 @@ input[type=range]:active::-webkit-slider-thumb{cursor:grabbing}
   <section class="order" id="order">
     <div class="order-copy">
       <div class="eyebrow">Order</div>
-      <h2>Send the configuration</h2>
-      <p>Everything set in the studio above travels with the request — colour,
+      <h2 id="orderTitle" tabindex="-1">Send the configuration</h2>
+      <p id="orderIntro">Everything set in the studio above travels with the request — colour,
          initials, die and its exact placement in millimetres. We reply with the price
          and the lead time before anything is cut.</p>
       <dl class="summary" id="summary"></dl>
@@ -387,6 +403,7 @@ input[type=range]:active::-webkit-slider-thumb{cursor:grabbing}
         <button class="btn btn-a" type="submit" id="ordSend">Send the request</button>
         <button class="btn btn-b" type="button" id="ordCopy">Copy the spec</button>
       </div>
+      <p id="orderHelp" class="order-help"></p>
       <p class="order-status" id="ordStatus" role="status" aria-live="polite"></p>
     </form>
   </section>
@@ -467,6 +484,24 @@ function copy(text){
 }
 
 fill();
+var send=document.getElementById("ordSend");
+function copyMode(message){
+  send.textContent="Copy configuration";
+  document.getElementById("orderTitle").textContent="Keep your configuration";
+  document.getElementById("orderIntro").textContent="Review your choices below. Copying keeps the specification for sharing; it does not submit an order or confirm a price or production time.";
+  document.getElementById("orderHelp").textContent=message+
+    " Copy the configuration and share it with your ZH contact. If you do not have a contact yet, save the spec until enquiries are available. Nothing has been sent.";
+}
+if(!ORDER_ENDPOINT && !ORDER_MAIL) copyMode("Online enquiries are not connected on this page.");
+var jump=document.querySelector(".order-jump");
+if(jump) jump.onclick=function(e){ e.preventDefault(); document.getElementById("orderTitle").focus(); };
+function copyConfiguration(){
+  return copy(specText()).then(function(){
+    say("Configuration copied. Share it with your ZH contact; no request has been sent.","ok");
+  }).catch(function(){
+    say("The browser blocked copying. Select the configuration summary and copy it manually. No request has been sent.","err");
+  });
+}
 document.getElementById("ordCopy").onclick=function(){
   copy(specText())
     .then(function(){ say("The spec is on the clipboard.","ok"); })
@@ -474,6 +509,7 @@ document.getElementById("ordCopy").onclick=function(){
 };
 document.getElementById("orderForm").addEventListener("submit",function(e){
   e.preventDefault();
+  if(!ORDER_ENDPOINT && !ORDER_MAIL){ copyConfiguration(); return; }
   var name=document.getElementById("ordName"), mail=document.getElementById("ordMail");
   var bad=[];
   if(!name.value.trim()) bad.push(name);
@@ -505,7 +541,11 @@ document.getElementById("orderForm").addEventListener("submit",function(e){
     btn.disabled=true; say("Sending…");
     fetch(ORDER_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json"},
                           body:JSON.stringify(payload)})
-      .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); })
+      .then(function(r){
+        if(!r.ok) throw new Error("HTTP "+r.status);
+        return r.json();
+      })
+      .then(function(data){ if(data.ok!==true || !data.ref) throw new Error("Missing confirmation"); })
       .then(function(){
         btn.disabled=false;
         say("Sent. We answer to "+payload.email+" with the price and the lead time.","ok");
@@ -513,8 +553,9 @@ document.getElementById("orderForm").addEventListener("submit",function(e){
       })
       .catch(function(err){
         btn.disabled=false;
-        copy(body).catch(function(){});
-        say("The request did not go through ("+err.message+"). The whole thing is on your clipboard — send it over any way you like.","err");
+        ORDER_ENDPOINT="";
+        copyMode("Online enquiries are currently unavailable.");
+        say("No confirmation was received ("+err.message+"). Your details are still here. Use Copy configuration to share the spec with your ZH contact. If you already submitted it, check with ZH before trying again.","err");
       });
     return;
   }
@@ -2216,7 +2257,7 @@ function softNote(){
 const swWrap=document.getElementById("swatches");
 HIDES.forEach(function(h,i){
   const b=document.createElement("button");
-  b.className="sw"; b.style.background="#"+h.hex.toString(16).padStart(6,"0");
+  b.className="sw"; b.style.setProperty("--hide","#"+h.hex.toString(16).padStart(6,"0"));
   b.setAttribute("aria-pressed",i===0?"true":"false");
   b.setAttribute("aria-label",h.name); b.title=h.name;
   b.onclick=function(){
