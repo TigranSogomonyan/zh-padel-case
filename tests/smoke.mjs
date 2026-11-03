@@ -37,15 +37,15 @@ const configurations = [
     name: 'desktop',
     options: { viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 },
   },
-  {
-    name: 'mobile',
+  ...[390, 375, 320].map((width) => ({
+    name: 'mobile-' + width,
     options: {
-      viewport: { width: 390, height: 844 },
+      viewport: { width, height: 844 },
       deviceScaleFactor: 1,
       isMobile: true,
       hasTouch: true,
     },
-  },
+  })),
 ];
 
 let browser;
@@ -111,7 +111,17 @@ try {
             missingViewportMeta: !document.querySelector('meta[name="viewport"]'),
             unlabeledButtons: buttons.filter((el) => !accessibleName(el)).length,
             unlabeledFields: inputs.filter((el) => !accessibleName(el)).length,
-            imagesWithoutAlt: images.filter((el) => !el.hasAttribute('alt')).length
+            imagesWithoutAlt: images.filter((el) => !el.hasAttribute('alt')).length,
+            smallTouchTargets: buttons.filter((el) => {
+              const rect = el.getBoundingClientRect();
+              const style = getComputedStyle(el);
+              return style.display !== 'none' && style.visibility !== 'hidden' &&
+                rect.width > 0 && rect.height > 0 && (rect.width < 44 || rect.height < 44);
+            }).slice(0, 30).map((el) => {
+              const rect = el.getBoundingClientRect();
+              return { name: accessibleName(el), width: Math.round(rect.width),
+                height: Math.round(rect.height) };
+            })
           }
         };
       });
