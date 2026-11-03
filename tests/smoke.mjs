@@ -154,7 +154,7 @@ try {
       console.log(name + ': changing initials updated the 3D canvas');
 
       const beforeCamera = checksum(await canvas.screenshot());
-      await page.locator('button').filter({ hasText: /^BACK$/ }).first().click();
+      await page.locator('button, [role="button"]').filter({ hasText: /^BACK$/ }).first().click();
       await page.waitForTimeout(1200);
       const afterCamera = checksum(await canvas.screenshot());
       assert.notEqual(beforeCamera, afterCamera,
