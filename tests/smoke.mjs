@@ -154,7 +154,16 @@ try {
       console.log(name + ': changing initials updated the 3D canvas');
 
       const beforeCamera = checksum(await canvas.screenshot());
-      await page.locator('button, [role="button"]').filter({ hasText: /^BACK$/ }).first().click();
+      const backActivated = await page.evaluate(() => {
+        const controls = [...document.querySelectorAll('button, [role="button"]')];
+        const back = controls.find((el) =>
+          (el.innerText || el.textContent || '').trim() === 'BACK'
+        );
+        if (!back) return false;
+        back.click();
+        return true;
+      });
+      assert.ok(backActivated, name + ': Back camera control was not found');
       await page.waitForTimeout(1200);
       const afterCamera = checksum(await canvas.screenshot());
       assert.notEqual(beforeCamera, afterCamera,
