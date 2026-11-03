@@ -1,0 +1,13 @@
+{
+  "name": "zh-padel-case-static-checks",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:smoke": "node tests/smoke.mjs",
+    "test:stage1": "ZH_HTML=artifacts-stage1.html ZH_STAGE1=1 node tests/smoke.mjs && node tests/order-fallback.mjs",
+    "build:stage1": "npm --prefix source run build:site"
+  },
+  "devDependencies": {
+    "playwright": "1.55.0"
+  }
+}

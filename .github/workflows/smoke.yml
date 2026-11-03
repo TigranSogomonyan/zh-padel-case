@@ -1,0 +1,43 @@
+name: ZH static page smoke tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  browser-smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out site
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install test dependencies
+        run: npm install --no-audit --no-fund
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Install original source dependencies
+        run: npm ci --prefix source --ignore-scripts
+      - name: Check source and software renderer
+        run: npm --prefix source run check
+      - name: Build review version from source
+        run: npm run build:stage1
+      - name: Check desktop, mobile, keyboard and order fallback
+        run: npm run test:stage1
+      - name: Upload screenshots and diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zh-browser-smoke
+          path: artifacts/
+          if-no-files-found: ignore
+          retention-days: 14

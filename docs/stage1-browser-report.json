@@ -1,0 +1,1098 @@
+{
+  "checkedAt": "2026-11-03T18:58:56.318Z",
+  "results": [
+    {
+      "viewport": "desktop",
+      "title": "ZH Padel Case",
+      "language": "en",
+      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
+      "bodyTextLength": 1730,
+      "canvasCount": 1,
+      "horizontalOverflowPx": 0,
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Your initials, pressed into the hide"
+        },
+        {
+          "level": "h2",
+          "text": "Keep your configuration"
+        }
+      ],
+      "controls": {
+        "buttons": [
+          {
+            "tag": "button",
+            "role": null,
+            "text": "THREE-QUARTER",
+            "name": "THREE-QUARTER"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "FRONT",
+            "name": "FRONT"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "PROFILE",
+            "name": "PROFILE"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "BACK",
+            "name": "BACK"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "",
+            "name": "Navy"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "",
+            "name": "Aqua"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "",
+            "name": "Burgundy"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "",
+            "name": "Orange"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "",
+            "name": "Brown"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "",
+            "name": "White"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "Clipped on",
+            "name": "Clipped on"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "Taken off",
+            "name": "Taken off"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "Ab",
+            "name": "Cormorant Garamond, serif"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "Ab",
+            "name": "Golos Text, sans serif"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "Ab",
+            "name": "Monospace"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "SAVE PREVIEW",
+            "name": "SAVE PREVIEW"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "RESET",
+            "name": "RESET"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "COPY CONFIGURATION",
+            "name": "COPY CONFIGURATION"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "COPY THE SPEC",
+            "name": "COPY THE SPEC"
+          }
+        ],
+        "fields": [
+          {
+            "tag": "input",
+            "type": "text",
+            "name": "INITIALS",
+            "placeholder": "AB"
+          },
+          {
+            "tag": "input",
+            "type": "range",
+            "name": "IMPRESSION SIZE 28 mm",
+            "placeholder": null
+          },
+          {
+            "tag": "input",
+            "type": "range",
+            "name": "Across",
+            "placeholder": null
+          },
+          {
+            "tag": "input",
+            "type": "range",
+            "name": "Along",
+            "placeholder": null
+          },
+          {
+            "tag": "input",
+            "type": "text",
+            "name": "NAME",
+            "placeholder": null
+          },
+          {
+            "tag": "input",
+            "type": "email",
+            "name": "EMAIL",
+            "placeholder": null
+          },
+          {
+            "tag": "input",
+            "type": "text",
+            "name": "TELEGRAM OR PHONE OPTIONAL",
+            "placeholder": null
+          },
+          {
+            "tag": "textarea",
+            "type": "textarea",
+            "name": "ANYTHING TO ADD OPTIONAL",
+            "placeholder": null
+          }
+        ]
+      },
+      "accessibilityAudit": {
+        "missingLanguage": false,
+        "missingViewportMeta": false,
+        "unlabeledButtons": 0,
+        "unlabeledFields": 0,
+        "imagesWithoutAlt": 0,
+        "smallTouchTargets": [
+          {
+            "name": "THREE-QUARTER",
+            "width": 140,
+            "height": 34
+          },
+          {
+            "name": "FRONT",
+            "width": 73,
+            "height": 34
+          },
+          {
+            "name": "PROFILE",
+            "width": 85,
+            "height": 34
+          },
+          {
+            "name": "BACK",
+            "width": 64,
+            "height": 34
+          }
+        ]
+      },
+      "touchTargets": [
+        {
+          "name": "Three-quarter",
+          "x": 118,
+          "y": 237.125,
+          "w": 140.109375,
+          "h": 33.5
+        },
+        {
+          "name": "Front",
+          "x": 259.109375,
+          "y": 237.125,
+          "w": 72.953125,
+          "h": 33.5
+        },
+        {
+          "name": "Profile",
+          "x": 333.0625,
+          "y": 237.125,
+          "w": 85.046875,
+          "h": 33.5
+        },
+        {
+          "name": "Back",
+          "x": 419.109375,
+          "y": 237.125,
+          "w": 63.5,
+          "h": 33.5
+        },
+        {
+          "name": "Navy",
+          "x": 992,
+          "y": 282.015625,
+          "w": 46.171875,
+          "h": 46.171875
+        },
+        {
+          "name": "Aqua",
+          "x": 1048.171875,
+          "y": 282.015625,
+          "w": 46.171875,
+          "h": 46.171875
+        },
+        {
+          "name": "Burgundy",
+          "x": 1104.34375,
+          "y": 282.015625,
+          "w": 46.171875,
+          "h": 46.171875
+        },
+        {
+          "name": "Orange",
+          "x": 1160.515625,
+          "y": 282.015625,
+          "w": 46.171875,
+          "h": 46.171875
+        },
+        {
+          "name": "Brown",
+          "x": 1216.6875,
+          "y": 282.015625,
+          "w": 46.171875,
+          "h": 46.171875
+        },
+        {
+          "name": "White",
+          "x": 1272.859375,
+          "y": 282.015625,
+          "w": 46.171875,
+          "h": 46.171875
+        }
+      ],
+      "screenshot": "/private/tmp/zh-stage1/artifacts/zh-desktop.png"
+    },
+    {
+      "viewport": "mobile-390",
+      "title": "ZH Padel Case",
+      "language": "en",
+      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
+      "bodyTextLength": 1703,
+      "canvasCount": 1,
+      "horizontalOverflowPx": 0,
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Your initials, pressed into the hide"
+        },
+        {
+          "level": "h2",
+          "text": "Keep your configuration"
+        }
+      ],
+      "controls": {
+        "buttons": [
+          {
+            "tag": "button",
+            "role": null,
+            "text": "THREE-QUARTER",
+            "name": "THREE-QUARTER"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "FRONT",
+            "name": "FRONT"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "PROFILE",
+            "name": "PROFILE"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "BACK",
+            "name": "BACK"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "",
+            "name": "Navy"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "",
+            "name": "Aqua"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "",
+            "name": "Burgundy"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "",
+            "name": "Orange"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "",
+            "name": "Brown"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "",
+            "name": "White"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "Clipped on",
+            "name": "Clipped on"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "Taken off",
+            "name": "Taken off"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "Ab",
+            "name": "Cormorant Garamond, serif"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "Ab",
+            "name": "Golos Text, sans serif"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "Ab",
+            "name": "Monospace"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "SAVE PREVIEW",
+            "name": "SAVE PREVIEW"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "RESET",
+            "name": "RESET"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "COPY CONFIGURATION",
+            "name": "COPY CONFIGURATION"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "COPY THE SPEC",
+            "name": "COPY THE SPEC"
+          }
+        ],
+        "fields": [
+          {
+            "tag": "input",
+            "type": "text",
+            "name": "INITIALS",
+            "placeholder": "AB"
+          },
+          {
+            "tag": "input",
+            "type": "range",
+            "name": "IMPRESSION SIZE 28 mm",
+            "placeholder": null
+          },
+          {
+            "tag": "input",
+            "type": "range",
+            "name": "Across",
+            "placeholder": null
+          },
+          {
+            "tag": "input",
+            "type": "range",
+            "name": "Along",
+            "placeholder": null
+          },
+          {
+            "tag": "input",
+            "type": "text",
+            "name": "NAME",
+            "placeholder": null
+          },
+          {
+            "tag": "input",
+            "type": "email",
+            "name": "EMAIL",
+            "placeholder": null
+          },
+          {
+            "tag": "input",
+            "type": "text",
+            "name": "TELEGRAM OR PHONE OPTIONAL",
+            "placeholder": null
+          },
+          {
+            "tag": "textarea",
+            "type": "textarea",
+            "name": "ANYTHING TO ADD OPTIONAL",
+            "placeholder": null
+          }
+        ]
+      },
+      "accessibilityAudit": {
+        "missingLanguage": false,
+        "missingViewportMeta": false,
+        "unlabeledButtons": 0,
+        "unlabeledFields": 0,
+        "imagesWithoutAlt": 0,
+        "smallTouchTargets": []
+      },
+      "touchTargets": [
+        {
+          "name": "Three-quarter",
+          "x": 26,
+          "y": 9.46875,
+          "w": 83.75,
+          "h": 47
+        },
+        {
+          "name": "Front",
+          "x": 110.75,
+          "y": 9.46875,
+          "w": 83.75,
+          "h": 47
+        },
+        {
+          "name": "Profile",
+          "x": 195.5,
+          "y": 9.46875,
+          "w": 83.75,
+          "h": 47
+        },
+        {
+          "name": "Back",
+          "x": 280.25,
+          "y": 9.46875,
+          "w": 83.75,
+          "h": 47
+        },
+        {
+          "name": "Navy",
+          "x": 45.5,
+          "y": 607.515625,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "name": "Aqua",
+          "x": 96.5,
+          "y": 607.515625,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "name": "Burgundy",
+          "x": 147.5,
+          "y": 607.515625,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "name": "Orange",
+          "x": 198.5,
+          "y": 607.515625,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "name": "Brown",
+          "x": 249.5,
+          "y": 607.515625,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "name": "White",
+          "x": 300.5,
+          "y": 607.515625,
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "screenshot": "/private/tmp/zh-stage1/artifacts/zh-mobile-390.png"
+    },
+    {
+      "viewport": "mobile-375",
+      "title": "ZH Padel Case",
+      "language": "en",
+      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
+      "bodyTextLength": 1703,
+      "canvasCount": 1,
+      "horizontalOverflowPx": 0,
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Your initials, pressed into the hide"
+        },
+        {
+          "level": "h2",
+          "text": "Keep your configuration"
+        }
+      ],
+      "controls": {
+        "buttons": [
+          {
+            "tag": "button",
+            "role": null,
+            "text": "THREE-QUARTER",
+            "name": "THREE-QUARTER"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "FRONT",
+            "name": "FRONT"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "PROFILE",
+            "name": "PROFILE"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "BACK",
+            "name": "BACK"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "",
+            "name": "Navy"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "",
+            "name": "Aqua"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "",
+            "name": "Burgundy"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "",
+            "name": "Orange"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "",
+            "name": "Brown"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "",
+            "name": "White"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "Clipped on",
+            "name": "Clipped on"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "Taken off",
+            "name": "Taken off"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "Ab",
+            "name": "Cormorant Garamond, serif"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "Ab",
+            "name": "Golos Text, sans serif"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "Ab",
+            "name": "Monospace"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "SAVE PREVIEW",
+            "name": "SAVE PREVIEW"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "RESET",
+            "name": "RESET"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "COPY CONFIGURATION",
+            "name": "COPY CONFIGURATION"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "COPY THE SPEC",
+            "name": "COPY THE SPEC"
+          }
+        ],
+        "fields": [
+          {
+            "tag": "input",
+            "type": "text",
+            "name": "INITIALS",
+            "placeholder": "AB"
+          },
+          {
+            "tag": "input",
+            "type": "range",
+            "name": "IMPRESSION SIZE 28 mm",
+            "placeholder": null
+          },
+          {
+            "tag": "input",
+            "type": "range",
+            "name": "Across",
+            "placeholder": null
+          },
+          {
+            "tag": "input",
+            "type": "range",
+            "name": "Along",
+            "placeholder": null
+          },
+          {
+            "tag": "input",
+            "type": "text",
+            "name": "NAME",
+            "placeholder": null
+          },
+          {
+            "tag": "input",
+            "type": "email",
+            "name": "EMAIL",
+            "placeholder": null
+          },
+          {
+            "tag": "input",
+            "type": "text",
+            "name": "TELEGRAM OR PHONE OPTIONAL",
+            "placeholder": null
+          },
+          {
+            "tag": "textarea",
+            "type": "textarea",
+            "name": "ANYTHING TO ADD OPTIONAL",
+            "placeholder": null
+          }
+        ]
+      },
+      "accessibilityAudit": {
+        "missingLanguage": false,
+        "missingViewportMeta": false,
+        "unlabeledButtons": 0,
+        "unlabeledFields": 0,
+        "imagesWithoutAlt": 0,
+        "smallTouchTargets": []
+      },
+      "touchTargets": [
+        {
+          "name": "Three-quarter",
+          "x": 26,
+          "y": 9.46875,
+          "w": 80,
+          "h": 47
+        },
+        {
+          "name": "Front",
+          "x": 107,
+          "y": 9.46875,
+          "w": 80,
+          "h": 47
+        },
+        {
+          "name": "Profile",
+          "x": 188,
+          "y": 9.46875,
+          "w": 80,
+          "h": 47
+        },
+        {
+          "name": "Back",
+          "x": 269,
+          "y": 9.46875,
+          "w": 80,
+          "h": 47
+        },
+        {
+          "name": "Navy",
+          "x": 68.5,
+          "y": 607.515625,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "name": "Aqua",
+          "x": 165.5,
+          "y": 607.515625,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "name": "Burgundy",
+          "x": 262.5,
+          "y": 607.515625,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "name": "Orange",
+          "x": 68.5,
+          "y": 661.515625,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "name": "Brown",
+          "x": 165.5,
+          "y": 661.515625,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "name": "White",
+          "x": 262.5,
+          "y": 661.515625,
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "screenshot": "/private/tmp/zh-stage1/artifacts/zh-mobile-375.png"
+    },
+    {
+      "viewport": "mobile-320",
+      "title": "ZH Padel Case",
+      "language": "en",
+      "viewportMeta": "width=device-width, initial-scale=1, viewport-fit=cover",
+      "bodyTextLength": 1703,
+      "canvasCount": 1,
+      "horizontalOverflowPx": 0,
+      "headings": [
+        {
+          "level": "h1",
+          "text": "Your initials, pressed into the hide"
+        },
+        {
+          "level": "h2",
+          "text": "Keep your configuration"
+        }
+      ],
+      "controls": {
+        "buttons": [
+          {
+            "tag": "button",
+            "role": null,
+            "text": "THREE-QUARTER",
+            "name": "THREE-QUARTER"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "FRONT",
+            "name": "FRONT"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "PROFILE",
+            "name": "PROFILE"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "BACK",
+            "name": "BACK"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "",
+            "name": "Navy"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "",
+            "name": "Aqua"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "",
+            "name": "Burgundy"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "",
+            "name": "Orange"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "",
+            "name": "Brown"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "",
+            "name": "White"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "Clipped on",
+            "name": "Clipped on"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "Taken off",
+            "name": "Taken off"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "Ab",
+            "name": "Cormorant Garamond, serif"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "Ab",
+            "name": "Golos Text, sans serif"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "Ab",
+            "name": "Monospace"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "SAVE PREVIEW",
+            "name": "SAVE PREVIEW"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "RESET",
+            "name": "RESET"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "COPY CONFIGURATION",
+            "name": "COPY CONFIGURATION"
+          },
+          {
+            "tag": "button",
+            "role": null,
+            "text": "COPY THE SPEC",
+            "name": "COPY THE SPEC"
+          }
+        ],
+        "fields": [
+          {
+            "tag": "input",
+            "type": "text",
+            "name": "INITIALS",
+            "placeholder": "AB"
+          },
+          {
+            "tag": "input",
+            "type": "range",
+            "name": "IMPRESSION SIZE 28 mm",
+            "placeholder": null
+          },
+          {
+            "tag": "input",
+            "type": "range",
+            "name": "Across",
+            "placeholder": null
+          },
+          {
+            "tag": "input",
+            "type": "range",
+            "name": "Along",
+            "placeholder": null
+          },
+          {
+            "tag": "input",
+            "type": "text",
+            "name": "NAME",
+            "placeholder": null
+          },
+          {
+            "tag": "input",
+            "type": "email",
+            "name": "EMAIL",
+            "placeholder": null
+          },
+          {
+            "tag": "input",
+            "type": "text",
+            "name": "TELEGRAM OR PHONE OPTIONAL",
+            "placeholder": null
+          },
+          {
+            "tag": "textarea",
+            "type": "textarea",
+            "name": "ANYTHING TO ADD OPTIONAL",
+            "placeholder": null
+          }
+        ]
+      },
+      "accessibilityAudit": {
+        "missingLanguage": false,
+        "missingViewportMeta": false,
+        "unlabeledButtons": 0,
+        "unlabeledFields": 0,
+        "imagesWithoutAlt": 0,
+        "smallTouchTargets": []
+      },
+      "touchTargets": [
+        {
+          "name": "Three-quarter",
+          "x": 26,
+          "y": 9.5625,
+          "w": 66.25,
+          "h": 47
+        },
+        {
+          "name": "Front",
+          "x": 93.25,
+          "y": 9.5625,
+          "w": 66.25,
+          "h": 47
+        },
+        {
+          "name": "Profile",
+          "x": 160.5,
+          "y": 9.5625,
+          "w": 66.25,
+          "h": 47
+        },
+        {
+          "name": "Back",
+          "x": 227.75,
+          "y": 9.5625,
+          "w": 66.25,
+          "h": 47
+        },
+        {
+          "name": "Navy",
+          "x": 59.328125,
+          "y": 607.609375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "name": "Aqua",
+          "x": 137.984375,
+          "y": 607.609375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "name": "Burgundy",
+          "x": 216.65625,
+          "y": 607.609375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "name": "Orange",
+          "x": 59.328125,
+          "y": 661.609375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "name": "Brown",
+          "x": 137.984375,
+          "y": 661.609375,
+          "w": 44,
+          "h": 44
+        },
+        {
+          "name": "White",
+          "x": 216.65625,
+          "y": 661.609375,
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "screenshot": "/private/tmp/zh-stage1/artifacts/zh-mobile-320.png"
+    }
+  ]
+}
