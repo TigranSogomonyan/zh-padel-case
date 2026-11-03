@@ -490,16 +490,16 @@ function copyMode(message){
   document.getElementById("orderTitle").textContent="Keep your configuration";
   document.getElementById("orderIntro").textContent="Review your choices below. Copying keeps the specification for sharing; it does not submit an order or confirm a price or production time.";
   document.getElementById("orderHelp").textContent=message+
-    " Copy the configuration and share it with your ZH contact. If you do not have a contact yet, save the spec until enquiries are available. Nothing has been sent.";
+    " Copy the configuration and share it with your ZH contact. If you do not have a contact yet, save the spec until enquiries are available. Copying does not send a request.";
 }
 if(!ORDER_ENDPOINT && !ORDER_MAIL) copyMode("Online enquiries are not connected on this page.");
 var jump=document.querySelector(".order-jump");
 if(jump) jump.onclick=function(e){ e.preventDefault(); document.getElementById("orderTitle").focus(); };
 function copyConfiguration(){
   return copy(specText()).then(function(){
-    say("Configuration copied. Share it with your ZH contact; no request has been sent.","ok");
+    say("Configuration copied. Share it with your ZH contact. Copying does not send a request.","ok");
   }).catch(function(){
-    say("The browser blocked copying. Select the configuration summary and copy it manually. No request has been sent.","err");
+    say("The browser blocked copying. Select the configuration summary and copy it manually. Copying has not sent a request.","err");
   });
 }
 document.getElementById("ordCopy").onclick=function(){

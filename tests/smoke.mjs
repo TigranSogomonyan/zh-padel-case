@@ -224,7 +224,7 @@ try {
         await context.grantPermissions(['clipboard-read','clipboard-write']);
         await page.getByRole('button',{name:'Copy configuration',exact:true}).click();
         assert.match(await page.evaluate(()=>navigator.clipboard.readText()),/leather: Burgundy/);
-        assert.match(await page.locator('#ordStatus').innerText(),/no request has been sent/);
+        assert.match(await page.locator('#ordStatus').innerText(),/Copying does not send a request/);
         await page.screenshot({path:join(outputDir,'zh-'+name+'-order.png'),fullPage:true});
         state.touchTargets=targets;
       }
