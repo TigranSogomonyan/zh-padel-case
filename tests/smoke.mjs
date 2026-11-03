@@ -71,20 +71,56 @@ try {
       // Allow the software-rendered scene to initialize.
       await page.waitForTimeout(3000);
 
-      const state = await page.evaluate(() => ({
-        title: document.title,
-        bodyTextLength: document.body?.innerText?.trim().length || 0,
-        canvasCount: document.querySelectorAll('canvas').length,
-        horizontalOverflowPx: Math.max(
-          0,
-          document.documentElement.scrollWidth - document.documentElement.clientWidth
-        ),
-      }));
+      const state = await page.evaluate(() => {
+        const visibleText = (el) => (el.innerText || el.textContent || '').trim().replace(/\\s+/g, ' ').slice(0, 100);
+        const accessibleName = (el) => {
+          const labelledBy = (el.getAttribute('aria-labelledby') || '')
+            .split(/\\s+/).filter(Boolean)
+            .map((id) => document.getElementById(id)?.textContent?.trim() || '').join(' ').trim();
+          const explicitLabel = el.labels && Array.from(el.labels).map(visibleText).join(' ').trim();
+          return el.getAttribute('aria-label') || labelledBy || explicitLabel ||
+            (el.tagName === 'INPUT' && el.type === 'submit' ? el.value : '') ||
+            visibleText(el) || el.getAttribute('title') || '';
+        };
+        const inputs = [...document.querySelectorAll('input:not([type="hidden"]), select, textarea')];
+        const buttons = [...document.querySelectorAll('button, [role="button"]')];
+        const images = [...document.querySelectorAll('img')];
+        return {
+          title: document.title,
+          language: document.documentElement.lang,
+          viewportMeta: document.querySelector('meta[name="viewport"]')?.content || null,
+          bodyTextLength: document.body?.innerText?.trim().length || 0,
+          canvasCount: document.querySelectorAll('canvas').length,
+          horizontalOverflowPx: Math.max(
+            0,
+            document.documentElement.scrollWidth - document.documentElement.clientWidth
+          ),
+          headings: [...document.querySelectorAll('h1,h2,h3')].map((el) => ({
+            level: el.tagName.toLowerCase(), text: visibleText(el)
+          })).slice(0, 30),
+          controls: {
+            buttons: buttons.map((el) => ({ text: visibleText(el), name: accessibleName(el) })).slice(0, 50),
+            fields: inputs.map((el) => ({
+              tag: el.tagName.toLowerCase(), type: el.type || null,
+              name: accessibleName(el), placeholder: el.getAttribute('placeholder')
+            })).slice(0, 40)
+          },
+          accessibilityAudit: {
+            missingLanguage: !document.documentElement.lang,
+            missingViewportMeta: !document.querySelector('meta[name="viewport"]'),
+            unlabeledButtons: buttons.filter((el) => !accessibleName(el)).length,
+            unlabeledFields: inputs.filter((el) => !accessibleName(el)).length,
+            imagesWithoutAlt: images.filter((el) => !el.hasAttribute('alt')).length
+          }
+        };
+      });
 
       // Keep the checks independent of styling and unstable CSS selectors.
       assert.ok(state.title.trim(), name + ': empty document title');
       assert.ok(state.bodyTextLength > 40, name + ': page content is missing');
       assert.ok(state.canvasCount > 0, name + ': 3D canvas is missing');
+      assert.ok(state.horizontalOverflowPx <= 1, name + ': horizontal overflow of '
+        + state.horizontalOverflowPx + 'px');
 
       const screenshot = join(outputDir, 'zh-' + name + '.png');
       await page.screenshot({ path: screenshot, fullPage: true, timeout: 60_000 });
@@ -93,6 +129,11 @@ try {
       results.push({ viewport: name, ...state, screenshot });
       console.log(name + ': OK; canvas=' + state.canvasCount
         + ', horizontal overflow=' + state.horizontalOverflowPx + 'px');
+      console.log(name + ' UI: ' + JSON.stringify({
+        headings: state.headings,
+        controls: state.controls,
+        accessibilityAudit: state.accessibilityAudit
+      }));
     } finally {
       await context.close();
     }
