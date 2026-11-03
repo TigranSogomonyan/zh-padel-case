@@ -146,7 +146,7 @@ try {
 
       // Initials and camera switches should also affect the actual render.
       const beforeInitials = checksum(await canvas.screenshot());
-      await page.getByRole('textbox', { name: 'INITIALS', exact: true }).fill('ZH');
+      await page.locator('input[placeholder="AB"]').fill('ZH');
       await page.waitForTimeout(1000);
       const afterInitials = checksum(await canvas.screenshot());
       assert.notEqual(beforeInitials, afterInitials,
