@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { createServer } from 'node:http';
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { appendFile, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
@@ -203,6 +203,35 @@ try {
     join(outputDir, 'report.json'),
     JSON.stringify({ checkedAt: new Date().toISOString(), results }, null, 2) + '\n'
   );
+
+  const summary = [
+    '## ZH browser smoke test — responsive overview',
+    '',
+    '| Viewport | Horizontal overflow | Unlabeled fields | Small interactive targets (<44px) |',
+    '| --- | ---: | ---: | ---: |',
+    ...results.map((r) =>
+      '| ' + r.viewport + ' | ' + r.horizontalOverflowPx + ' px | ' +
+      r.accessibilityAudit.unlabeledFields + ' | ' +
+      r.accessibilityAudit.smallTouchTargets.length + ' |'
+    ),
+    '',
+    '### Touch targets needing review',
+    '',
+    ...results.flatMap((r) => {
+      const items = r.accessibilityAudit.smallTouchTargets;
+      return items.length
+        ? ['**' + r.viewport + '**', ...items.map((item) =>
+          '- ' + item.name + ': ' + item.width + ' × ' + item.height + ' px'), '']
+        : ['**' + r.viewport + '**: no targets below 44px', ''];
+    }),
+    'These are geometric diagnostics, not a full accessibility audit.',
+    'Screenshots and full JSON report are uploaded in the workflow artifact.',
+    ''
+  ].join('\n');
+  await writeFile(join(outputDir, 'summary.md'), summary);
+  if (process.env.GITHUB_STEP_SUMMARY) {
+    await appendFile(process.env.GITHUB_STEP_SUMMARY, summary);
+  }
 } finally {
   await browser?.close();
   await new Promise((resolve) => server.close(resolve));
