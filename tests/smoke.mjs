@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { createServer } from 'node:http';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
@@ -124,6 +125,24 @@ try {
 
       const screenshot = join(outputDir, 'zh-' + name + '.png');
       await page.screenshot({ path: screenshot, fullPage: true, timeout: 60_000 });
+
+      // Verify that choosing a different leather colour changes the actual
+      // rendered canvas, not just the selected swatch. The configured HTML
+      // must provide a button accessible by its leather colour name.
+      const canvas = page.locator('canvas').first();
+      const checksum = (bytes) => createHash('sha256').update(bytes).digest('hex');
+      const beforeColour = checksum(await canvas.screenshot());
+      await page.getByRole('button', { name: 'Burgundy', exact: true }).click();
+      await page.waitForTimeout(1500);
+      const afterColour = checksum(await canvas.screenshot());
+      assert.notEqual(beforeColour, afterColour,
+        name + ': selecting Burgundy did not change the 3D canvas');
+      await page.screenshot({
+        path: join(outputDir, 'zh-' + name + '-burgundy.png'),
+        fullPage: true,
+        timeout: 60_000
+      });
+      console.log(name + ': leather colour change updated the 3D canvas');
 
       assert.deepEqual(pageErrors, [], name + ': uncaught JavaScript errors');
       results.push({ viewport: name, ...state, screenshot });
