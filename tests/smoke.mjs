@@ -144,6 +144,28 @@ try {
       });
       console.log(name + ': leather colour change updated the 3D canvas');
 
+      // Initials and camera switches should also affect the actual render.
+      const beforeInitials = checksum(await canvas.screenshot());
+      await page.getByRole('textbox', { name: 'INITIALS', exact: true }).fill('ZH');
+      await page.waitForTimeout(1000);
+      const afterInitials = checksum(await canvas.screenshot());
+      assert.notEqual(beforeInitials, afterInitials,
+        name + ': changing initials did not change the 3D canvas');
+      console.log(name + ': changing initials updated the 3D canvas');
+
+      const beforeCamera = checksum(await canvas.screenshot());
+      await page.getByRole('button', { name: 'BACK', exact: true }).click();
+      await page.waitForTimeout(1200);
+      const afterCamera = checksum(await canvas.screenshot());
+      assert.notEqual(beforeCamera, afterCamera,
+        name + ': selecting Back did not change the 3D canvas');
+      await page.screenshot({
+        path: join(outputDir, 'zh-' + name + '-back.png'),
+        fullPage: true,
+        timeout: 60_000
+      });
+      console.log(name + ': camera switch updated the 3D canvas');
+
       assert.deepEqual(pageErrors, [], name + ': uncaught JavaScript errors');
       results.push({ viewport: name, ...state, screenshot });
       console.log(name + ': OK; canvas=' + state.canvasCount
